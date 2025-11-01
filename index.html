@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>VB Build LLC — Home Renovation Experts</title>
+    <meta name="description" content="VB Build LLC: Over 10 years in construction across Europe. Interior remodels, full renovations from floor to ceiling.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Open Sans', sans-serif; line-height: 1.6; color: #333; background: #fff; overflow-x: hidden; }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+        :root {
+            --orange-dark: #e65100;
+            --orange-main: #f57c00;
+            --orange-light: #ff8c00;
+            --gray-bg: #f9f9f9;
+        }
+
+        header { 
+            background: var(--orange-dark); 
+            color: #fff; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2); 
+        }
+        .header-inner { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 0; 
+        }
+        .logo { 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 700; 
+            font-size: 1.6rem; 
+            color: #fff; 
+        }
+        nav ul { 
+            display: flex; 
+            gap: 1rem; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
+        nav a { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            transition: color 0.3s; 
+            cursor: pointer; 
+        }
+        nav a:hover { 
+            color: var(--orange-light); 
+        }
+
+        .call-btn {
+            background: var(--orange-main);
+            color: #fff;
+            padding: 0.65rem 1.1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.35);
+            white-space: nowrap;
+        }
+        .call-btn:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+            z-index: 1001;
+        }
+        .burger span {
+            width: 28px;
+            height: 3px;
+            background: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .burger.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .burger.active span:nth-child(2) { opacity: 0; }
+        .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(230, 81, 0, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 80px 20px 20px;
+            transition: left 0.4s ease;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+        .mobile-nav.active { left: 0; }
+        .mobile-nav ul { flex-direction: column; gap: 1.8rem; }
+        .mobile-nav a {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+            padding: 0.6rem 0;
+            display: block;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        .mobile-nav a:hover { color: var(--orange-light); padding-left: 10px; }
+
+        .mobile-call {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--orange-main);
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+            z-index: 999;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+        .mobile-call:hover { transform: scale(1.1); }
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4); }
+            70% { box-shadow: 0 6px 30px rgba(245, 124, 0, 0.6); }
+            100% { box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4); }
+        }
+
+        .hero { 
+            background: url('images/hero.jpg') center/cover no-repeat;
+            color: #fff; 
+            text-align: center; 
+            padding: 140px 20px 90px; 
+            margin-top: 65px; 
+            position: relative;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.45); z-index: 1;
+        }
+        .hero > .container { position: relative; z-index: 2; }
+        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: 2.3rem; margin-bottom: 1rem; text-shadow: 0 3px 8px rgba(0,0,0,0.6); }
+        .hero p { font-size: 1rem; max-width: 800px; margin: 0 auto 1.2rem; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+
+        .story { padding: 60px 0; background: var(--gray-bg); text-align: center; }
+        .story h2 { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--orange-dark); margin-bottom: 1.2rem; }
+        .story p { font-size: 0.95rem; max-width: 750px; margin: 0 auto 1rem; }
+
+        .before-after { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: all 0.35s; border: 2px solid transparent; position: relative; }
+        .before-after:hover { transform: translateY(-6px); border-color: var(--orange-main); }
+        .ba-container { position: relative; width: 100%; height: 180px; overflow: hidden; border-radius: 10px; cursor: ew-resize; user-select: none; touch-action: pan-y; }
+        .ba-before, .ba-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .ba-after { clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); z-index: 1; }
+        .ba-resizer { position: absolute; top: 0; left: 50%; width: 6px; height: 100%; background: #fff; transform: translateX(-50%); box-shadow: 0 0 12px rgba(0,0,0,0.4); cursor: ew-resize; z-index: 10; }
+        .ba-handle { position: absolute; top: 50%; left: 50%; width: 34px; height: 34px; background: var(--orange-main); border: 3px solid #fff; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 12px rgba(0,0,0,0.4); }
+        .ba-label { position: absolute; top: 8px; padding: 3px 7px; background: rgba(0,0,0,0.7); color: #fff; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 5; }
+        .ba-label.before { left: 8px; } .ba-label.after { right: 8px; }
+
+        .work { padding: 60px 0; background: #fff; }
+        .work h2 { font-family: 'Montserrat', sans-serif; text-align: center; font-size: 2rem; color: var(--orange-dark); margin-bottom: 2rem; }
+        .work-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+
+        .gallery { padding: 60px 0; background: var(--gray-bg); text-align: center; }
+        .gallery h2 { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--orange-dark); margin-bottom: 1.2rem; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 8px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            aspect-ratio: 1 / 1;
+            background: #f0f0f0;
+            cursor: zoom-in;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 16px;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e65100;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .gallery-item:hover .gallery-delete {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        .gallery-delete:hover {
+            background: #c41e00;
+        }
+
+        .gallery-upload { 
+            margin: 1.2rem auto; max-width: 100%; padding: 1rem; background: #fff; 
+            border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; 
+        }
+        .gallery-upload input[type="file"] { width: 100%; padding: 0.8rem; border: 1px dashed var(--orange-main); border-radius: 6px; margin-bottom: 0.7rem; font-size: 0.9rem; }
+        .gallery-upload button { background: var(--orange-main); color: #fff; border: none; padding: 0.8rem 1.6rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox img {
+            max-width: 92%;
+            max-height: 88vh;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            transform: scale(0.85);
+            transition: transform 0.4s ease;
+        }
+
+        .lightbox.active img {
+            transform: scale(1);
+        }
+
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            color: #fff;
+            font-size: 2.8rem;
+            font-weight: 300;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .lightbox-close { top: 20px; right: 25px; }
+        .lightbox-prev { left: 25px; top: 50%; transform: translateY(-50%); }
+        .lightbox-next { right: 25px; top: 50%; transform: translateY(-50%); }
+
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: var(--orange-main);
+            transform: scale(1.15) translateY(-50%);
+        }
+
+        .lightbox-prev:hover { transform: scale(1.15) translateY(-50%) translateX(-3px); }
+        .lightbox-next:hover { transform: scale(1.15) translateY(-50%) translateX(3px); }
+
+        .lightbox-prev::before { content: 'chevron_left'; font-family: 'Material Icons'; font-size: 2.8rem; }
+        .lightbox-next::before { content: 'chevron_right'; font-family: 'Material Icons'; font-size: 2.8rem; }
+        .lightbox-close::before { content: 'close'; font-family: 'Material Icons'; font-size: 2.8rem; }
+
+        .contact { padding: 60px 0; background: #fff; text-align: center; }
+        .contact h2 { font-family: 'Montserrat', sans-serif; font-size: 1.9rem; color: var(--orange-dark); margin-bottom: 1rem; }
+        .contact-phone { font-size: 1.6rem; font-weight: 700; color: var(--orange-main); margin: 1rem 0; }
+        .contact p { font-size: 0.95rem; color: #555; max-width: 600px; margin: 0 auto; }
+
+        .reviews { padding: 60px 0; background: #fff; text-align: center; }
+        .reviews h2 { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: var(--orange-dark); margin-bottom: 1.2rem; }
+        .review-form { max-width: 100%; margin: 0 auto 2rem; padding: 1rem; background: var(--gray-bg); border-radius: 12px; }
+        .review-form input, .review-form textarea, .review-form select { width: 100%; padding: 0.8rem; margin-bottom: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
+        .review-form button { background: var(--orange-main); color: #fff; border: none; padding: 0.8rem 1.6rem; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; }
+
+        .reviews-list { display: grid; gap: 1rem; max-width: 800px; margin: 0 auto; }
+        .review-item { background: #fff; padding: 1rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: left; border-left: 4px solid var(--orange-main); position: relative; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .review-name { font-weight: 600; color: var(--orange-dark); font-size: 0.95rem; }
+        .review-stars { color: #f57c00; font-size: 0.95rem; }
+        .review-text { font-size: 0.9rem; color: #444; line-height: 1.5; }
+        .delete-btn { 
+            position: absolute; top: 6px; right: 6px; background: #e65100; color: #fff; 
+            border: none; width: 24px; height: 24px; border-radius: 50%; font-size: 0.8rem; 
+            cursor: pointer; opacity: 0; transition: opacity 0.3s; display: block;
+        }
+        .review-item:hover .delete-btn { opacity: 1; }
+
+        .pagination {
+            display: flex; justify-content: center; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap;
+        }
+        .pagination button {
+            background: var(--orange-main); color: #fff; border: none; padding: 0.6rem 1.2rem;
+            border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+            min-width: 100px; font-size: 0.9rem;
+        }
+        .pagination button:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; }
+
+        .admin-panel { text-align: center; margin-top: 1.2rem; font-size: 0.7rem; color: #999; }
+        .admin-panel input { width: 80px; padding: 0.3rem; font-size: 0.65rem; border: 1px solid #ddd; border-radius: 4px; }
+        .admin-panel button { background: #aaa; color: #fff; border: none; padding: 0.3rem 0.6rem; font-size: 0.65rem; border-radius: 4px; cursor: pointer; }
+
+        footer { background: var(--orange-dark); color: #fff; text-align: center; padding: 1.5rem 0 1rem; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .burger { display: flex; }
+            .call-btn { display: none; }
+            .mobile-call { display: flex; }
+            #desktopNav { display: none; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; }
+            .lightbox-close, .lightbox-prev, .lightbox-next { width: 48px; height: 48px; font-size: 2.2rem; }
+            .lightbox-prev::before, .lightbox-next::before, .lightbox-close::before { font-size: 2.2rem; }
+        }
+
+        @media (min-width: 769px) {
+            .burger, .mobile-call, .mobile-nav { display: none; }
+            .hero { padding: 170px 20px 110px; margin-top: 75px; }
+            .hero h1 { font-size: 3.2rem; }
+            .hero p { font-size: 1.25rem; }
+            .work-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
+            .ba-container { height: 250px; }
+            .ba-handle { width: 40px; height: 40px; }
+            .contact-phone { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-inner">
+            <div class="logo">VB Build LLC</div>
+            <div class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="desktopNav">
+                <ul>
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#story" class="nav-link">Story</a></li>
+                    <li><a href="#work" class="nav-link">Work</a></li>
+                    <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                    <li><a href="#reviews" class="nav-link">Reviews</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <a href="tel:+15029567701" class="call-btn">
+                Call Us +1 (502) 956-7701
+            </a>
+        </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#story" class="nav-link">Story</a></li>
+            <li><a href="#work" class="nav-link">Work</a></li>
+            <li><a href="#gallery" class="nav-link">Gallery</a></li>
+            <li><a href="#reviews" class="nav-link">Reviews</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <a href="tel:+15029567701" class="mobile-call">Phone</a>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" id="lightboxClose"></span>
+        <span class="lightbox-prev" id="lightboxPrev"></span>
+        <span class="lightbox-next" id="lightboxNext"></span>
+        <img id="lightboxImage" src="" alt="Enlarged image">
+    </div>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>VB Build LLC</h1>
+            <p>Your trusted partner for home renovations across Europe.</p>
+        </div>
+    </section>
+
+    <section id="story" class="story">
+        <div class="container">
+            <h2>Our Story</h2>
+            <p>VB Build LLC is a locally owned business with over a decade of proven experience across Europe. Specializing in interior remodels, we also offer floor to ceiling construction services. From new construction to a total remodel, VB Build LLC can do it all.</p>
+            <p>Our team is committed to providing exceptional craftsmanship and outstanding customer service. We aim to be your trusted, all-in-one partner for every home renovation need.</p>
+        </div>
+    </section>
+
+    <section id="work" class="work">
+        <div class="container">
+            <h2>Our Work — Before & After</h2>
+            <div class="work-grid">
+                <div class="before-after">
+                    <div class="ba-container">
+                        <img src="images/before1.jpg" alt="Before" class="ba-before">
+                        <img src="images/after1.jpg" alt="After" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-container">
+                        <img src="images/before2.jpg" alt="Before" class="ba-before">
+                        <img src="images/after2.jpg" alt="After" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
+                <div class="before-after">
+                    <div class="ba-container">
+                        <img src="images/before3.jpg" alt="Before" class="ba-before">
+                        <img src="images/after3.jpg" alt="After" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2>Our Gallery</h2>
+            <div class="gallery-upload" id="galleryUpload">
+                <input type="file" id="galleryFile" accept="image/*" />
+                <button id="uploadBtn">Upload Photo</button>
+            </div>
+            <div id="galleryGrid" class="gallery-grid"></div>
+        </div>
+    </section>
+
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <h2>Client Reviews</h2>
+            <div class="review-form">
+                <form id="reviewForm">
+                    <input type="text" id="reviewName" placeholder="Your Name" required />
+                    <select id="reviewRating" required>
+                        <option value="" disabled selected>Rate us (1-5)</option>
+                        <option value="5">5 — Excellent</option>
+                        <option value="4">4 — Very Good</option>
+                        <option value="3">3 — Good</option>
+                        <option value="2">2 — Fair</option>
+                        <option value="1">1 — Poor</option>
+                    </select>
+                    <textarea id="reviewText" rows="3" placeholder="Your feedback..." required></textarea>
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
+            <div id="reviewsList" class="reviews-list"></div>
+            <div class="pagination" id="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contacts</h2>
+            <p class="contact-phone">
+                <a href="tel:+15029567701">Call Us: +1 (502) 956-7701</a>
+            </p>
+            <p class="contact-phone">
+                <a href="sms:+15029561179">Text Message: 502-956-1179</a>
+            </p>
+            <p>Call or text us anytime — we’re here to help with your renovation project.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 VB Build LLC. All rights reserved.</p>
+            <div class="admin-panel">
+                <input type="password" id="adminPassword" placeholder="admin" />
+                <button id="adminLoginBtn">Login</button>
+                <div id="adminStatus" class="admin-status"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
+        const burger = document.getElementById('burger');
+        const mobileNav = document.getElementById('mobileNav');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        const galleryGrid = document.getElementById('galleryGrid');
+        const galleryUpload = document.getElementById('galleryUpload');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const galleryFile = document.getElementById('galleryFile');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewsList = document.getElementById('reviewsList');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminPassword = document.getElementById('adminPassword');
+        const adminStatus = document.getElementById('adminStatus');
+
+        let isAdmin = false;
+        let galleryImages = [];
+        let currentIndex = 0;
+        let allReviews = [];
+        const REVIEWS_PER_PAGE = 4;
+        let currentPage = 1;
+
+        // === АДМИН ВХОД (БЕЗОПАСНЫЙ) ===
+        adminLoginBtn.addEventListener('click', async () => {
+            const input = adminPassword.value.trim();
+            if (!input) return;
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: input })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    isAdmin = true;
+                    adminStatus.textContent = 'Admin ON';
+                    adminStatus.style.color = 'green';
+                    adminPassword.value = '';
+                    galleryUpload.style.display = 'block';
+                    showDeleteButtons();
+                    loadGallery();
+                    loadReviews();
+                } else {
+                    adminStatus.textContent = 'Wrong';
+                    adminStatus.style.color = 'red';
+                    setTimeout(() => adminStatus.textContent = '', 2000);
+                }
+            } catch (err) {
+                console.error('Ошибка входа:', err);
+                adminStatus.textContent = 'Error';
+                adminStatus.style.color = 'red';
+            }
+        });
+
+        function showDeleteButtons() {
+            document.querySelectorAll('.gallery-delete, .delete-btn').forEach(btn => {
+                btn.style.display = 'flex';
+                btn.style.opacity = '1';
+            });
+        }
+
+        // === БУРГЕР МЕНЮ ===
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                burger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // === ПЛАВНЫЙ СКРОЛЛ ===
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // === СЛАЙДЕР BEFORE/AFTER ===
+        document.querySelectorAll('.ba-container').forEach(container => {
+            const resizer = container.querySelector('.ba-resizer');
+            const afterImg = container.querySelector('.ba-after');
+            let isActive = false;
+
+            const setDefault = () => {
+                afterImg.style.clipPath = 'polygon(50% 0, 100% 0, 100% 100%, 50% 100%)';
+                resizer.style.left = '50%';
+            };
+            setDefault();
+
+            const update = (e) => {
+                if (!isActive) return;
+                const rect = container.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const p = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                afterImg.style.clipPath = `polygon(${p}% 0, 100% 0, 100% 100%, ${p}% 100%)`;
+                resizer.style.left = p + '%';
+            };
+
+            container.addEventListener('mousedown', (e) => { isActive = true; update(e); });
+            document.addEventListener('mousemove', update);
+            document.addEventListener('mouseup', () => isActive = false);
+            container.addEventListener('touchstart', (e) => { isActive = true; update(e); }, { passive: false });
+            container.addEventListener('touchmove', (e) => { e.preventDefault(); update(e); }, { passive: false });
+            container.addEventListener('touchend', () => isActive = false);
+        });
+
+        // === LIGHTBOX ===
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImage.src = galleryImages[index];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            setTimeout(() => {
+                lightboxImage.src = '';
+                document.body.style.overflow = '';
+            }, 400);
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            lightboxImage.src = galleryImages[currentIndex];
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            lightboxImage.src = galleryImages[currentIndex];
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPrev);
+        lightboxNext.addEventListener('click', showNext);
+        lightbox.addEventListener('click', (e) => e.target === lightbox && closeLightbox());
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showPrev();
+            if (e.key === 'ArrowRight') showNext();
+        });
+
+        // === ГАЛЕРЕЯ С СЕРВЕРА ===
+        async function loadGallery() {
+            try {
+                const res = await fetch('/api/images');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const files = await res.json();
+                galleryGrid.innerHTML = '';
+                galleryImages = [];
+
+                const excluded = ['hero.jpg', 'before1.jpg', 'after1.jpg', 'before2.jpg', 'after2.jpg', 'before3.jpg', 'after3.jpg'];
+                files.filter(f => !excluded.includes(f)).forEach((filename, idx) => {
+                    const src = `images/${filename}`;
+                    galleryImages.push(src);
+                    addImageToDOM(src, idx, filename);
+                });
+            } catch (err) {
+                console.error('Ошибка загрузки галереи:', err);
+            }
+        }
+
+        function addImageToDOM(src, index, filename) {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.innerHTML = `
+                <img src="${src}" alt="Gallery image" loading="lazy">
+                ${isAdmin ? `<button class="gallery-delete" onclick="deleteImage('${filename}')">×</button>` : ''}
+            `;
+            div.querySelector('img').addEventListener('click', () => openLightbox(index));
+            galleryGrid.appendChild(div);
+        }
+
+        window.deleteImage = async (filename) => {
+            if (confirm('Удалить фото?')) {
+                try {
+                    const res = await fetch(`/api/delete/${filename}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) loadGallery();
+                } catch (err) {
+                    alert('Ошибка удаления');
+                }
+            }
+        };
+
+        uploadBtn.addEventListener('click', async () => {
+            const file = galleryFile.files[0];
+            if (!file) return alert('Выберите фото!');
+            const formData = new FormData();
+            formData.append('image', file);
+            try {
+                const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    loadGallery();
+                    galleryFile.value = '';
+                } else {
+                    alert('Ошибка загрузки');
+                }
+            } catch (err) {
+                alert('Ошибка сети');
+            }
+        });
+
+        // === ОТЗЫВЫ С СЕРВЕРА ===
+        async function loadReviews() {
+            try {
+                const res = await fetch('/api/reviews');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                allReviews = await res.json();
+                renderReviews();
+            } catch (err) {
+                console.error('Ошибка загрузки отзывов:', err);
+                alert('Не удалось загрузить отзывы. Проверьте сервер.');
+            }
+        }
+
+        async function addReview(name, rating, text) {
+            const payload = { name, rating: +rating, text };
+            console.log('Отправка отзыва:', payload);
+            try {
+                const res = await fetch('/api/reviews', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                console.log('Ответ сервера:', data);
+                if (data.success) {
+                    loadReviews();
+                    reviewForm.reset();
+                } else {
+                    throw new Error(data.error || 'Server error');
+                }
+            } catch (err) {
+                console.error('Ошибка отправки:', err);
+                alert('Ошибка отправки отзыва. Проверьте консоль (F12).');
+            }
+        }
+
+        window.deleteReview = async (index) => {
+            if (confirm('Удалить отзыв?')) {
+                try {
+                    const res = await fetch(`/api/reviews/${index}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) loadReviews();
+                } catch (err) {
+                    alert('Ошибка удаления');
+                }
+            }
+        };
+
+        function renderReviews() {
+            const start = (currentPage - 1) * REVIEWS_PER_PAGE;
+            const end = start + REVIEWS_PER_PAGE;
+            const pageReviews = allReviews.slice(start, end);
+            reviewsList.innerHTML = '';
+            pageReviews.forEach((r, i) => {
+                const globalIndex = start + i;
+                const div = document.createElement('div');
+                div.className = 'review-item';
+                div.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-name">${escapeHTML(r.name)}</div>
+                        <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+                    </div>
+                    <div class="review-text">${escapeHTML(r.text)}</div>
+                    <small style="color:#888; display:block; margin-top:6px;">${new Date(r.date).toLocaleDateString()}</small>
+                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${globalIndex})">×</button>` : ''}
+                `;
+                reviewsList.appendChild(div);
+            });
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const total = Math.ceil(allReviews.length / REVIEWS_PER_PAGE);
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === total || total === 0;
+            document.getElementById('pagination').style.display = total > 1 ? 'flex' : 'none';
+        }
+
+        prevPageBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderReviews(); } };
+        nextPageBtn.onclick = () => {
+            const total = Math.ceil(allReviews.length / REVIEWS_PER_PAGE);
+            if (currentPage < total) { currentPage++; renderReviews(); }
+        };
+
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reviewName').value.trim();
+            const rating = document.getElementById('reviewRating').value;
+            const text = document.getElementById('reviewText').value.trim();
+            if (name && rating && text) {
+                addReview(name, rating, text);
+            }
+        });
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // === ЗАПУСК ===
+        loadGallery();
+        loadReviews();
+    </script>
+</body>
+</html>
