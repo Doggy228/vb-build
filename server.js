@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -6,10 +5,9 @@ const fs = require('fs');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-
-const ADMIN_PASSWORD = 'kateunder'; 
+const ADMIN_PASSWORD = 'kateunder';
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -32,22 +30,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-
 app.post('/api/admin/login', (req, res) => {
-    let password = (req.body.password || '').trim();
-
-    if (!password) {
-        console.log('[ADMIN] Попытка входа: пустой пароль');
-        return res.status(400).json({ success: false });
-    }
-
+    const password = (req.body.password || '').trim();
     const match = password === ADMIN_PASSWORD;
-
-    console.log(`[ADMIN] Ввод: "${password}" → ${match ? 'УСПЕХ' : 'ОТКАЗ'}`);
-
     res.json({ success: match });
 });
-
 
 app.get('/api/images', (req, res) => {
     fs.readdir(IMAGES_DIR, (err, files) => {
@@ -68,7 +55,6 @@ app.delete('/api/delete/:filename', (req, res) => {
         res.json({ success: !err });
     });
 });
-
 
 app.get('/api/reviews', (req, res) => {
     fs.readFile(REVIEWS_FILE, 'utf8', (err, data) => {
@@ -107,7 +93,62 @@ app.delete('/api/reviews/:index', (req, res) => {
     });
 });
 
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const files = await fs.promises.readdir(IMAGES_DIR);
+        const imageFiles = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
+        const today = new Date().toISOString().split('T')[0];
+
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">`;
+
+        const pages = [
+            { loc: '', priority: '1.0', changefreq: 'weekly', images: ['hero.jpg'] },
+            { loc: '#about', priority: '0.9', changefreq: 'monthly' },
+            { loc: '#work', priority: '0.9', changefreq: 'weekly', images: ['after1.jpg', 'after2.jpg', 'after3.jpg'] },
+            { loc: '#gallery', priority: '0.9', changefreq: 'daily' },
+            { loc: '#reviews', priority: '0.7', changefreq: 'daily' },
+            { loc: '#contact', priority: '0.8', changefreq: 'monthly' },
+        ];
+
+        for (const page of pages) {
+            xml += `\n  <url>
+    <loc>https://vb-buildllc.onrender.com/${page.loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>`;
+
+            if (page.images) {
+                for (const img of page.images) {
+                    if (imageFiles.includes(img)) {
+                        xml += `\n    <image:image>
+      <image:loc>https://vb-buildllc.onrender.com/images/${img}</image:loc>
+      <image:title>VB Build LLC Renovation Project</image:title>
+    </image:image>`;
+                    }
+                }
+            }
+
+            xml += `\n  </url>`;
+        }
+
+        xml += '\n</urlset>';
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+    } catch (err) {
+        res.status(500).send('Sitemap error');
+    }
+});
+
+app.get('/robots.txt', (req, res) => {
+    res.type('text/plain');
+    res.send(`User-agent: *
+Allow: /
+
+Sitemap: https://vb-buildllc.onrender.com/sitemap.xml`);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Сервер запущен: http://localhost:${PORT}`);
-    console.log(`Админ-пароль: ${ADMIN_PASSWORD} (прямо в коде)`);
+    console.log(`Сервер запущен: https://vb-buildllc.onrender.com`);
 });

@@ -5,11 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>VB Build LLC — Home Renovation Experts | Kitchen, Bathroom, Flooring</title>
-    <meta name="description" content="VB Build LLC: Over 10 years in construction across USA. Interior remodels, full renovations from floor to ceiling.">
-    
+    <meta name="description" content="VB Build LLC: Over 10 years in construction across USA. Interior remodels, full renovation from floor to ceiling.">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -420,6 +419,7 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             transform: scale(0.85);
             transition: transform 0.4s ease;
+            display: block;
         }
 
         .lightbox.active img {
@@ -581,11 +581,12 @@
         <span class="material-icons">phone</span>
     </a>
 
+    <!-- ФИКС: img скрыт + alt пустой -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose"></span>
         <span class="lightbox-prev" id="lightboxPrev"></span>
         <span class="lightbox-next" id="lightboxNext"></span>
-        <img id="lightboxImage" src="" alt="Enlarged renovation photo - VB Build LLC">
+        <img id="lightboxImage" src="" alt="" style="display:none;">
     </div>
 
     <section id="home" class="hero">
@@ -746,6 +747,7 @@
     </footer>
 
     <script>
+        // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
         const burger = document.getElementById('burger');
         const mobileNav = document.getElementById('mobileNav');
         const lightbox = document.getElementById('lightbox');
@@ -772,6 +774,7 @@
         const REVIEWS_PER_PAGE = 4;
         let currentPage = 1;
 
+        // === АДМИН ВХОД ===
         adminLoginBtn.addEventListener('click', async () => {
             const input = adminPassword.value.trim();
             if (!input) return;
@@ -799,7 +802,6 @@
                     setTimeout(() => adminStatus.textContent = '', 2000);
                 }
             } catch (err) {
-                console.error('Login error:', err);
                 adminStatus.textContent = 'Error';
                 adminStatus.style.color = 'red';
             }
@@ -812,6 +814,7 @@
             });
         }
 
+        // === БУРГЕР МЕНЮ ===
         burger.addEventListener('click', () => {
             burger.classList.toggle('active');
             mobileNav.classList.toggle('active');
@@ -823,6 +826,7 @@
             });
         });
 
+        // === ПЛАВНАЯ ПРОКРУТКА ===
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -836,6 +840,7 @@
             });
         });
 
+        // === BEFORE-AFTER СЛАЙДЕР ===
         document.querySelectorAll('.ba-container').forEach(container => {
             const resizer = container.querySelector('.ba-resizer');
             const afterImg = container.querySelector('.ba-after');
@@ -864,10 +869,12 @@
             container.addEventListener('touchend', () => isActive = false);
         });
 
+        // === LIGHTBOX ===
         function openLightbox(index) {
             currentIndex = index;
             lightboxImage.src = galleryImages[index].src;
             lightboxImage.alt = galleryImages[index].alt;
+            lightboxImage.style.display = 'block';
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -876,6 +883,8 @@
             lightbox.classList.remove('active');
             setTimeout(() => {
                 lightboxImage.src = '';
+                lightboxImage.alt = '';
+                lightboxImage.style.display = 'none';
                 document.body.style.overflow = '';
             }, 400);
         }
@@ -903,6 +912,7 @@
             if (e.key === 'ArrowRight') showNext();
         });
 
+        // === ГАЛЕРЕЯ ===
         async function loadGallery() {
             try {
                 const res = await fetch('/api/images');
@@ -977,6 +987,7 @@
             }
         });
 
+        // === ОТЗЫВЫ ===
         async function loadReviews() {
             try {
                 const res = await fetch('/api/reviews');
@@ -984,7 +995,6 @@
                 allReviews = await res.json();
                 renderReviews();
             } catch (err) {
-                console.error('Reviews load error:', err);
                 alert('Failed to load reviews. Check server.');
             }
         }
@@ -1005,8 +1015,7 @@
                     throw new Error(data.error || 'Server error');
                 }
             } catch (err) {
-                console.error('Submit error:', err);
-                alert('Review submission failed. Check console (F12).');
+                alert('Review submission failed.');
             }
         }
 
@@ -1074,6 +1083,7 @@
             return div.innerHTML;
         }
 
+        // === ЗАПУСК ===
         loadGallery();
         loadReviews();
     </script>
