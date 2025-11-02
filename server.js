@@ -8,8 +8,8 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-// === ПАРОЛЬ ПРЯМО В КОДЕ (без хеша) ===
-const ADMIN_PASSWORD = 'kateunder'; // ← Введи сюда любой пароль
+
+const ADMIN_PASSWORD = 'kateunder'; 
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// === API: АДМИН ВХОД (ПРОСТОЕ СРАВНЕНИЕ) ===
+
 app.post('/api/admin/login', (req, res) => {
     let password = (req.body.password || '').trim();
 
@@ -48,7 +48,7 @@ app.post('/api/admin/login', (req, res) => {
     res.json({ success: match });
 });
 
-// === API: ГАЛЕРЕЯ ===
+
 app.get('/api/images', (req, res) => {
     fs.readdir(IMAGES_DIR, (err, files) => {
         if (err) return res.status(500).json([]);
@@ -69,7 +69,7 @@ app.delete('/api/delete/:filename', (req, res) => {
     });
 });
 
-// === API: ОТЗЫВЫ ===
+
 app.get('/api/reviews', (req, res) => {
     fs.readFile(REVIEWS_FILE, 'utf8', (err, data) => {
         if (err) return res.status(500).json([]);
