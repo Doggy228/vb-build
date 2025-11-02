@@ -1,12 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/LocalBusiness">
 <head>
-    <meta name="google-site-verification" content="of_TUIXbScHTwDLJFFWWMSmB3ESSdRLcs1EUx00Y_s8" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>VB Build LLC — Home Renovation Experts | Kitchen, Bathroom, Flooring</title>
-    <meta name="description" content="VB Build LLC: Over 10 years in construction across USA. Interior remodels, full renovation from floor to ceiling.">
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+    <meta name="description" content="VB Build LLC: Over 10 years in home renovation across USA. Kitchen & bathroom remodeling, flooring, painting. Call +1 (502) 956-7701 for a free quote.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HomeAndConstructionBusiness",
+      "name": "VB Build LLC",
+      "image": "https://vb-buildllc.onrender.com/images/hero.jpg",
+      "@id": "https://vb-buildllc.onrender.com/#organization",
+      "url": "https://vb-buildllc.onrender.com",
+      "telephone": "+15029567701",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "KY",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 38.2527,
+        "longitude": -85.7585
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/vbbuildllc",
+        "https://www.instagram.com/vbbuildllc"
+      ],
+      "description": "VB Build LLC offers expert home renovation services across USA: kitchen remodeling, bathroom renovations, flooring, painting, drywall. Over 10 years of experience.",
+      "priceRange": "$$"
+    }
+    </script>
+    <meta property="og:title" content="VB Build LLC — Home Renovation Experts" />
+    <meta property="og:description" content="Kitchen, bathroom, flooring, painting. Call +1 (502) 956-7701" />
+    <meta property="og:image" content="https://vb-buildllc.onrender.com/images/hero.jpg" />
+    <meta property="og:url" content="https://vb-buildllc.onrender.com" />
+    <meta property="og:type" content="website" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -581,7 +620,6 @@
         <span class="material-icons">phone</span>
     </a>
 
-    <!-- ФИКС: img скрыт + alt пустой -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose"></span>
         <span class="lightbox-prev" id="lightboxPrev"></span>
@@ -747,7 +785,6 @@
     </footer>
 
     <script>
-        // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
         const burger = document.getElementById('burger');
         const mobileNav = document.getElementById('mobileNav');
         const lightbox = document.getElementById('lightbox');
@@ -774,7 +811,6 @@
         const REVIEWS_PER_PAGE = 4;
         let currentPage = 1;
 
-        // === АДМИН ВХОД ===
         adminLoginBtn.addEventListener('click', async () => {
             const input = adminPassword.value.trim();
             if (!input) return;
@@ -814,7 +850,6 @@
             });
         }
 
-        // === БУРГЕР МЕНЮ ===
         burger.addEventListener('click', () => {
             burger.classList.toggle('active');
             mobileNav.classList.toggle('active');
@@ -826,7 +861,6 @@
             });
         });
 
-        // === ПЛАВНАЯ ПРОКРУТКА ===
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -840,7 +874,6 @@
             });
         });
 
-        // === BEFORE-AFTER СЛАЙДЕР ===
         document.querySelectorAll('.ba-container').forEach(container => {
             const resizer = container.querySelector('.ba-resizer');
             const afterImg = container.querySelector('.ba-after');
@@ -869,7 +902,6 @@
             container.addEventListener('touchend', () => isActive = false);
         });
 
-        // === LIGHTBOX ===
         function openLightbox(index) {
             currentIndex = index;
             lightboxImage.src = galleryImages[index].src;
@@ -912,7 +944,6 @@
             if (e.key === 'ArrowRight') showNext();
         });
 
-        // === ГАЛЕРЕЯ ===
         async function loadGallery() {
             try {
                 const res = await fetch('/api/images');
@@ -987,7 +1018,6 @@
             }
         });
 
-        // === ОТЗЫВЫ ===
         async function loadReviews() {
             try {
                 const res = await fetch('/api/reviews');
@@ -1083,7 +1113,6 @@
             return div.innerHTML;
         }
 
-        // === ЗАПУСК ===
         loadGallery();
         loadReviews();
     </script>
