@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/LocalBusiness">
 <head>
     <meta name="google-site-verification" content="of_TUIXbScHTwDLJFFWWMSmB3ESSdRLcs1EUx00Y_s8" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>VB Build LLC — Home Renovation Experts</title>
+    <title>VB Build LLC — Home Renovation Experts | Kitchen, Bathroom, Flooring</title>
     <meta name="description" content="VB Build LLC: Over 10 years in construction across USA. Interior remodels, full renovations from floor to ceiling.">
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -537,7 +537,7 @@
 
     <header>
         <div class="container header-inner">
-            <div class="logo">VB Build LLC</div>
+            <div class="logo" itemprop="name">VB Build LLC</div>
             <div class="burger" id="burger">
                 <span></span>
                 <span></span>
@@ -554,7 +554,7 @@
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
-            <a href="tel:+15029567701" class="call-btn">
+            <a href="tel:+15029567701" class="call-btn" itemprop="telephone">
                 Call Us +1 (502) 956-7701
             </a>
         </div>
@@ -585,12 +585,12 @@
         <span class="lightbox-close" id="lightboxClose"></span>
         <span class="lightbox-prev" id="lightboxPrev"></span>
         <span class="lightbox-next" id="lightboxNext"></span>
-        <img id="lightboxImage" src="" alt="Enlarged image">
+        <img id="lightboxImage" src="" alt="Enlarged renovation photo - VB Build LLC">
     </div>
 
     <section id="home" class="hero">
         <div class="container">
-            <h1>VB Build LLC</h1>
+            <h1 itemprop="name">VB Build LLC</h1>
             <p>Your trusted partner for home renovations across USA.</p>
         </div>
     </section>
@@ -655,8 +655,8 @@
             <div class="work-grid">
                 <div class="before-after">
                     <div class="ba-container">
-                        <img src="images/before1.jpg" alt="Before" class="ba-before">
-                        <img src="images/after1.jpg" alt="After" class="ba-after">
+                        <img src="images/before1.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after1.jpg" alt="Modern kitchen renovation by VB Build LLC in USA" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -664,8 +664,8 @@
                 </div>
                 <div class="before-after">
                     <div class="ba-container">
-                        <img src="images/before2.jpg" alt="Before" class="ba-before">
-                        <img src="images/after2.jpg" alt="After" class="ba-after">
+                        <img src="images/before2.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after2.jpg" alt="Luxury bathroom remodel completed by VB Build LLC" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -673,8 +673,8 @@
                 </div>
                 <div class="before-after">
                     <div class="ba-container">
-                        <img src="images/before3.jpg" alt="Before" class="ba-before">
-                        <img src="images/after3.jpg" alt="After" class="ba-after">
+                        <img src="images/before3.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after3.jpg" alt="Professional flooring installation and full room renovation" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -684,7 +684,7 @@
         </div>
     </section>
 
-    <section id="gallery" class="gallery">
+    <section id="gallery" class="gallery" itemprop="image" itemscope itemtype="https://schema.org/ImageGallery">
         <div class="container">
             <h2>Our Gallery</h2>
             <div class="gallery-upload" id="galleryUpload">
@@ -695,7 +695,7 @@
         </div>
     </section>
 
-    <section id="reviews" class="reviews">
+    <section id="reviews" class="reviews" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
         <div class="container">
             <h2>Client Reviews</h2>
             <div class="review-form">
@@ -721,14 +721,14 @@
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <section id="contact" class="contact" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
         <div class="container">
             <h2>Contacts</h2>
             <p class="contact-phone">
                 <a href="tel:+15029567701">Call Us: +1 (502) 956-7701</a>
             </p>
             <p class="contact-phone">
-                <a href="sms:+15029561179">Text Message: 502-956-1179</a>
+                <a href="sms:+15029561179">Text Message: +1 (502) 956-1179</a>
             </p>
             <p>Call or text us anytime — we’re here to help with your renovation project.</p>
         </div>
@@ -866,7 +866,8 @@
 
         function openLightbox(index) {
             currentIndex = index;
-            lightboxImage.src = galleryImages[index];
+            lightboxImage.src = galleryImages[index].src;
+            lightboxImage.alt = galleryImages[index].alt;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -881,12 +882,14 @@
 
         function showPrev() {
             currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-            lightboxImage.src = galleryImages[currentIndex];
+            lightboxImage.src = galleryImages[currentIndex].src;
+            lightboxImage.alt = galleryImages[currentIndex].alt;
         }
 
         function showNext() {
             currentIndex = (currentIndex + 1) % galleryImages.length;
-            lightboxImage.src = galleryImages[currentIndex];
+            lightboxImage.src = galleryImages[currentIndex].src;
+            lightboxImage.alt = galleryImages[currentIndex].alt;
         }
 
         lightboxClose.addEventListener('click', closeLightbox);
@@ -909,21 +912,34 @@
                 galleryImages = [];
 
                 const excluded = ['hero.jpg', 'before1.jpg', 'after1.jpg', 'before2.jpg', 'after2.jpg', 'before3.jpg', 'after3.jpg'];
+                const galleryKeywords = [
+                    "kitchen renovation Louisville",
+                    "bathroom remodel USA",
+                    "professional flooring installation",
+                    "interior painting contractor",
+                    "full home renovation before after",
+                    "modern kitchen design",
+                    "luxury bathroom renovation",
+                    "laminate flooring installation"
+                ];
+
                 files.filter(f => !excluded.includes(f)).forEach((filename, idx) => {
                     const src = `images/${filename}`;
-                    galleryImages.push(src);
-                    addImageToDOM(src, idx, filename);
+                    const alt = galleryKeywords[idx % galleryKeywords.length] + " by VB Build LLC";
+                    galleryImages.push({ src, alt });
+                    addImageToDOM(src, alt, idx, filename);
                 });
             } catch (err) {
                 console.error('Gallery load error:', err);
             }
         }
 
-        function addImageToDOM(src, index, filename) {
+        function addImageToDOM(src, alt, index, filename) {
             const div = document.createElement('div');
             div.className = 'gallery-item';
             div.innerHTML = `
-                <img src="${src}" alt="Gallery image" loading="lazy">
+                <img src="${src}" alt="${alt}" loading="lazy" width="300" height="300"
+                     srcset="${src} 300w, ${src} 600w" sizes="(max-width: 600px) 140px, 200px">
                 ${isAdmin ? `<button class="gallery-delete" onclick="deleteImage('${filename}')">×</button>` : ''}
             `;
             div.querySelector('img').addEventListener('click', () => openLightbox(index));
