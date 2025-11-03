@@ -78,7 +78,7 @@
             position: fixed; 
             width: 100%; 
             top: 0; 
-            left: 0;
+            left: 0; 
             right: 0;
             z-index: 1000; 
             box-shadow: 0 3px 12px rgba(0,0,0,0.2); 
@@ -122,7 +122,7 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(245, 124, 0, 0.35);
             white-space: nowrap;
         }
@@ -176,7 +176,7 @@
             padding: 0.6rem 0;
             display: block;
             border-bottom: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
         .mobile-nav a:hover { color: var(--orange-light); padding-left: 10px; }
 
@@ -195,7 +195,7 @@
             font-size: 1.5rem;
             box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
             z-index: 999;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             animation: pulse 2s infinite;
         }
         .mobile-call:hover { transform: scale(1.1); }
@@ -304,7 +304,7 @@
             padding: 1.5rem;
             border-radius: 16px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             border: 1px solid #eee;
         }
         #about .service-item:hover {
@@ -344,7 +344,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .before-after { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: all 0.35s; border: 2px solid transparent; position: relative; }
+        .before-after { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: all 0.35s ease; border: 2px solid transparent; position: relative; }
         .before-after:hover { transform: translateY(-6px); border-color: var(--orange-main); }
         .ba-container { position: relative; width: 100%; height: 180px; overflow: hidden; border-radius: 10px; cursor: ew-resize; user-select: none; touch-action: pan-y; }
         .ba-before, .ba-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -375,10 +375,12 @@
             overflow: hidden;
             border-radius: 16px;
             box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease;
             aspect-ratio: 1 / 1;
             background: #f0f0f0;
             cursor: zoom-in;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .gallery-item img {
@@ -387,16 +389,19 @@
             object-fit: cover;
             object-position: center;
             border-radius: 16px;
-            transition: transform 0.4s ease;
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: scale(1);
+            will-change: transform;
         }
 
         .gallery-item:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+            z-index: 5;
         }
 
         .gallery-item:hover img {
-            transform: scale(1.08);
+            transform: scale(1.12);
         }
 
         .gallery-delete {
@@ -413,7 +418,7 @@
             font-weight: bold;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.3s ease, transform 0.2s ease;
+            transition: opacity 0.4s ease, transform 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -450,7 +455,7 @@
             z-index: 2000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.5s;
         }
 
         .lightbox.active {
@@ -463,13 +468,16 @@
             max-height: 88vh;
             border-radius: 16px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transform: scale(0.85);
-            transition: transform 0.4s ease;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
             display: block;
+            will-change: transform, opacity;
         }
 
         .lightbox.active img {
             transform: scale(1);
+            opacity: 1;
         }
 
         .lightbox-close,
@@ -522,7 +530,7 @@
         .review-form select { height: 48px; }
         .review-form button { background: var(--orange-main); color: #fff; border: none; padding: 0.85rem 1.6rem; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 0.95rem; }
 
-        .reviews-list { display: grid; gap: 1rem; max-width: 800px; margin: 0 auto; }
+        .reviews-list { display: grid; gap: 1rem; quite-width: 800px; margin: 0 auto; }
         .review-item { background: #fff; padding: 1rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: left; border-left: 4px solid var(--orange-main); position: relative; }
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         .review-name { font-weight: 600; color: var(--orange-dark); font-size: 0.95rem; }
@@ -702,13 +710,13 @@
                 margin: 0;
             }
             .copyright {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.admin-panel {
-    margin-left: auto;
-}
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .admin-panel {
+                margin-left: auto;
+            }
         }
     </style>
 </head>
