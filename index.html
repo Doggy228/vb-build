@@ -1016,15 +1016,15 @@
     <section id="contact-us">
         <div class="container">
             <h2>Contact Us</h2>
-            <form class="contact-form" id="contactForm">
-                <input type="text" id="contactName" placeholder="Your Name" required />
-                <input type="email" id="contactEmail" placeholder="Your Email" required />
-                <input type="tel" id="contactPhone" placeholder="Your Phone" required />
-                <textarea id="contactMessage" placeholder="Your Message or Project Details" required></textarea>
-                <button type="submit">Send Message</button>
-                <div class="success-msg" id="contactSuccess">Thank you! Your message has been sent.</div>
-                <div class="error-msg" id="contactError">Failed to send. Please try again.</div>
-            </form>
+<form class="contact-form" id="contactForm">
+    <input type="text" id="contactName" name="name" placeholder="Your Name" required />
+    <input type="email" id="contactEmail" name="email" placeholder="Your Email" required />
+    <input type="tel" id="contactPhone" name="phone" placeholder="Your Phone" required />
+    <textarea id="contactMessage" name="message" placeholder="Your Message or Project Details" required></textarea>
+    <button type="submit">Send Message</button>
+    <div class="success-msg" id="contactSuccess">Thank you! Your message has been sent.</div>
+    <div class="error-msg" id="contactError">Failed to send. Please try again.</div>
+</form>
         </div>
     </section>
 
