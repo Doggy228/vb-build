@@ -3,11 +3,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const ADMIN_PASSWORD = 'kateunder';
+const EMAIL_USER = 'vbbuildllc@gmail.com';
+const EMAIL_PASS = 'raro nwos pdcv vlbs'; // УКАЖИ App Password от Gmail
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -30,6 +33,47 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// === EMAIL TRANSPORTER ===
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
+    }
+});
+
+// === CONTACT FORM ENDPOINT ===
+app.post('/api/contact', async (req, res) => {
+    const { name, email, phone, message } = req.body;
+    if (!name || !email || !phone || !message) {
+        return res.status(400).json({ success: false });
+    }
+
+    const mailOptions = {
+        from: EMAIL_USER,
+        to: EMAIL_USER,
+        replyTo: email,
+        subject: `New Contact Form: ${name}`,
+        text: `
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+Message:
+${message}
+        `.trim()
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Email error:', err);
+        res.status(500).json({ success: false });
+    }
+});
+
+// === Остальные маршруты (admin, images, reviews) ===
 app.post('/api/admin/login', (req, res) => {
     const password = (req.body.password || '').trim();
     const match = password === ADMIN_PASSWORD;
@@ -108,6 +152,7 @@ app.get('/sitemap.xml', async (req, res) => {
             { loc: '#about', priority: '0.9', changefreq: 'monthly' },
             { loc: '#work', priority: '0.9', changefreq: 'weekly', images: ['after1.jpg', 'after2.jpg', 'after3.jpg'] },
             { loc: '#gallery', priority: '0.9', changefreq: 'daily' },
+            { loc: '#contact-us', priority: '0.9', changefreq: 'daily' },
             { loc: '#reviews', priority: '0.7', changefreq: 'daily' },
             { loc: '#contact', priority: '0.8', changefreq: 'monthly' },
         ];

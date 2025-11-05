@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>VB Build LLC — Home Renovation Experts | Kitchen, Bathroom, Flooring</title>
     <meta name="description" content="VB Build LLC: Over 10 years in home renovation across USA. Kitchen & bathroom remodeling, flooring, painting. Call +1 (502) 956-7701 for a free quote.">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -78,33 +79,39 @@
             position: fixed; 
             width: 100%; 
             top: 0; 
-            left: 0; 
+            left: 0;
             right: 0;
             z-index: 1000; 
             box-shadow: 0 3px 12px rgba(0,0,0,0.2); 
+            height: 70px;
         }
         .header-inner { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 1rem 0; 
+            padding: 0.7rem 0;
+            height: 100%;
         }
-        .logo { 
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 700; 
-            font-size: 1.6rem; 
-            color: #fff; 
+
+        .logo-img {
+            height: 60px;
+            width: auto;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
         nav ul { 
             display: flex; 
-            gap: 1rem; 
+            gap: 0.8rem;
             flex-wrap: wrap; 
-            justify-content: center; 
+            justify-content: center;
         }
         nav a { 
             font-weight: 600; 
-            font-size: 0.95rem; 
+            font-size: 0.88rem;
             transition: color 0.3s; 
             cursor: pointer; 
         }
@@ -115,13 +122,13 @@
         .call-btn {
             background: var(--orange-main);
             color: #fff;
-            padding: 0.65rem 1.1rem;
+            padding: 0.55rem 0.95rem;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.35rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(245, 124, 0, 0.35);
             white-space: nowrap;
@@ -180,6 +187,24 @@
         }
         .mobile-nav a:hover { color: var(--orange-light); padding-left: 10px; }
 
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 998;
+        }
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .mobile-call {
             position: fixed;
             bottom: 20px;
@@ -210,8 +235,8 @@
             background: url('images/hero.jpg') center/cover no-repeat;
             color: #fff; 
             text-align: center; 
-            padding: 140px 20px 90px; 
-            margin-top: 0 !important;
+            padding: 180px 20px 120px;
+            margin-top: 70px !important;
             position: relative;
         }
         .hero::before {
@@ -518,6 +543,75 @@
         .lightbox-next::before { content: 'chevron_right'; font-family: 'Material Icons'; font-size: 2.8rem; }
         .lightbox-close::before { content: 'close'; font-family: 'Material Icons'; font-size: 2.8rem; }
 
+        #contact-us {
+            padding: 60px 0;
+            background: #fff;
+            text-align: center;
+        }
+        #contact-us h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            color: var(--orange-dark);
+            margin-bottom: 1.5rem;
+        }
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--gray-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border 0.3s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--orange-main);
+            box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.15);
+        }
+        .contact-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .contact-form button {
+            background: var(--orange-main);
+            color: #fff;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .contact-form button:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+        }
+        .contact-form .success-msg {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: none;
+        }
+        .contact-form .error-msg {
+            color: #c62828;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: none;
+        }
+
         .contact { padding: 60px 0; background: #fff; text-align: center; }
         .contact h2 { font-family: 'Montserrat', sans-serif; font-size: 1.9rem; color: var(--orange-dark); margin-bottom: 1rem; }
         .contact-phone { font-size: 1.6rem; font-weight: 700; color: var(--orange-main); margin: 1rem 0; }
@@ -530,7 +624,7 @@
         .review-form select { height: 48px; }
         .review-form button { background: var(--orange-main); color: #fff; border: none; padding: 0.85rem 1.6rem; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 0.95rem; }
 
-        .reviews-list { display: grid; gap: 1rem; quite-width: 800px; margin: 0 auto; }
+        .reviews-list { display: grid; gap: 1rem; max-width: 800px; margin: 0 auto; }
         .review-item { background: #fff; padding: 1rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: left; border-left: 4px solid var(--orange-main); position: relative; }
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         .review-name { font-weight: 600; color: var(--orange-dark); font-size: 0.95rem; }
@@ -600,7 +694,6 @@
             opacity: 0.8;
         }
 
-        /* Footer — исправлено: копирайт строго по центру, админ-панель справа */
         footer { 
             background: var(--orange-dark); 
             color: #fff; 
@@ -629,21 +722,33 @@
         }
 
         @media (max-width: 768px) {
-            .burger { display: flex; }
-            .call-btn { display: none; }
-            .mobile-call { display: flex; }
-
+            header {
+                height: 60px;
+            }
             .header-inner {
-                justify-content: flex-start;
-                gap: 0.8rem;
-                padding: 0.8rem 0;
+                justify-content: space-between;
+                padding: 0.6rem 0;
+                gap: 0;
             }
-            .logo {
-                font-size: 1.15rem;
-                white-space: nowrap;
+
+            .burger { 
+                display: flex; 
+                order: 1;
             }
+
+            #logo {
+                order: 2;
+                flex: 1;
+                text-align: center;
+            }
+            .logo-img {
+                height: 48px;
+                margin: 0 auto;
+            }
+
             .mobile-call-top {
                 display: flex;
+                order: 3;
                 align-items: center;
                 background: var(--orange-main);
                 color: #fff;
@@ -663,7 +768,9 @@
                 transform: scale(1.05);
             }
 
-            #desktopNav { display: none; }
+            #desktopNav, .call-btn { display: none; }
+            .mobile-call { display: flex; }
+
             .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; }
             .lightbox-close, .lightbox-prev, .lightbox-next { width: 48px; height: 48px; font-size: 2.2rem; }
             .lightbox-prev::before, .lightbox-next::before, .lightbox-close::before { font-size: 2.2rem; }
@@ -673,6 +780,11 @@
             #about .service-item { padding: 1.2rem; }
             #about .guarantee { padding: 1.5rem; font-size: 0.95rem; }
 
+            .hero {
+                padding: 140px 20px 90px;
+                margin-top: 60px !important;
+            }
+
             .admin-panel {
                 margin: 0.5rem auto 0;
             }
@@ -680,7 +792,6 @@
             .admin-panel button { font-size: 0.52rem; padding: 1px 3px; }
             .admin-status { font-size: 0.52rem; min-width: 32px; }
 
-            /* На мобильных: копирайт по центру, админ-панель под ним */
             footer .container {
                 flex-direction: column;
                 text-align: center;
@@ -697,7 +808,10 @@
 
         @media (min-width: 769px) {
             .burger, .mobile-call, .mobile-call-top { display: none; }
-            .hero { padding: 170px 20px 110px; margin-top: 0 !important; }
+            .hero { 
+                padding: 200px 20px 130px;
+                margin-top: 70px !important; 
+            }
             .hero h1 { font-size: 3.2rem; }
             .hero p { font-size: 1.25rem; }
             .work-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
@@ -724,16 +838,21 @@
 
     <header>
         <div class="container header-inner">
-            <div class="logo" id="logo" itemprop="name">VB Build LLC</div>
-            <a href="tel:+15029567701" class="mobile-call-top">
-                <span class="material-icons">phone</span>
-                <span>+1 (502) 956-7701</span>
-            </a>
             <div class="burger" id="burger">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+
+            <a href="#home" id="logo">
+                <img src="logo.jpeg" alt="VB Build LLC Logo" class="logo-img" itemprop="logo">
+            </a>
+
+            <a href="tel:+15029567701" class="mobile-call-top">
+                <span class="material-icons">phone</span>
+                <span>+1 (502) 956-7701</span>
+            </a>
+
             <nav id="desktopNav">
                 <ul>
                     <li><a href="#home" class="nav-link">Home</a></li>
@@ -741,15 +860,19 @@
                     <li><a href="#about" class="nav-link">About Us</a></li>
                     <li><a href="#work" class="nav-link">Work</a></li>
                     <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                    <li><a href="#contact-us" class="nav-link">Contact Us</a></li>
                     <li><a href="#reviews" class="nav-link">Reviews</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
+
             <a href="tel:+15029567701" class="call-btn" itemprop="telephone">
                 Call Us +1 (502) 956-7701
             </a>
         </div>
     </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
 
     <nav class="mobile-nav" id="mobileNav">
         <ul>
@@ -758,6 +881,7 @@
             <li><a href="#about" class="nav-link">About Us</a></li>
             <li><a href="#work" class="nav-link">Work</a></li>
             <li><a href="#gallery" class="nav-link">Gallery</a></li>
+            <li><a href="#contact-us" class="nav-link">Contact Us</a></li>
             <li><a href="#reviews" class="nav-link">Reviews</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
@@ -881,6 +1005,21 @@
         </div>
     </section>
 
+    <section id="contact-us">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form class="contact-form" id="contactForm">
+                <input type="text" id="contactName" placeholder="Your Name" required />
+                <input type="email" id="contactEmail" placeholder="Your Email" required />
+                <input type="tel" id="contactPhone" placeholder="Your Phone" required />
+                <textarea id="contactMessage" placeholder="Your Message or Project Details" required></textarea>
+                <button type="submit">Send Message</button>
+                <div class="success-msg" id="contactSuccess">Thank you! Your message has been sent.</div>
+                <div class="error-msg" id="contactError">Failed to send. Please try again.</div>
+            </form>
+        </div>
+    </section>
+
     <section id="reviews" class="reviews" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
         <div class="container">
             <h2>Client Reviews</h2>
@@ -920,7 +1059,6 @@
         </div>
     </section>
 
-    <!-- Footer — копирайт строго по центру, админ-панель справа -->
     <footer>
         <div class="container">
             <p class="copyright">© 2025 VB Build LLC. All rights reserved.</p>
@@ -941,6 +1079,7 @@
 
         const burger = document.getElementById('burger');
         const mobileNav = document.getElementById('mobileNav');
+        const navOverlay = document.getElementById('navOverlay');
         const logo = document.getElementById('logo');
         const lightbox = document.getElementById('lightbox');
         const lightboxImage = document.getElementById('lightboxImage');
@@ -959,12 +1098,81 @@
         const adminPassword = document.getElementById('adminPassword');
         const adminStatus = document.getElementById('adminStatus');
 
+        const contactForm = document.getElementById('contactForm');
+        const contactSuccess = document.getElementById('contactSuccess');
+        const contactError = document.getElementById('contactError');
+
         let isAdmin = false;
         let galleryImages = [];
         let currentIndex = 0;
         let allReviews = [];
         const REVIEWS_PER_PAGE = 4;
         let currentPage = 1;
+
+        function closeMobileMenu() {
+            burger.classList.remove('active');
+            mobileNav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openMobileMenu() {
+            burger.classList.add('active');
+            mobileNav.classList.add('active');
+            navOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        burger.addEventListener('click', () => {
+            if (mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+
+        navOverlay.addEventListener('click', closeMobileMenu);
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, message })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    contactSuccess.style.display = 'block';
+                    contactError.style.display = 'none';
+                    contactForm.reset();
+                    setTimeout(() => contactSuccess.style.display = 'none', 5000);
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                contactError.style.display = 'block';
+                contactSuccess.style.display = 'none';
+                setTimeout(() => contactError.style.display = 'none', 5000);
+            }
+        });
 
         adminLoginBtn.addEventListener('click', async () => {
             const input = adminPassword.value.trim();
@@ -1004,17 +1212,6 @@
                 btn.style.opacity = '1';
             });
         }
-
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('active');
-            mobileNav.classList.toggle('active');
-        });
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                burger.classList.remove('active');
-                mobileNav.classList.remove('active');
-            });
-        });
 
         function smoothScrollTo(targetId) {
             const targetSection = document.querySelector(targetId);
@@ -1239,7 +1436,6 @@
                         <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
                     </div>
                     <div class="review-text">${escapeHTML(r.text)}</div>
-                    <small style="color:#888; display:block; margin-top:6px;">${new Date(r.date).toLocaleDateString()}</small>
                     ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${globalIndex})">×</button>` : ''}
                 `;
                 reviewsList.appendChild(div);
