@@ -12,7 +12,8 @@
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^7.0.10"
+    "nodemailer": "^7.0.10",
+    "pg": "^8.16.3"
   },
   "description": "",
   "keywords": [],

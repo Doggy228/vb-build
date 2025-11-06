@@ -87,7 +87,7 @@
             position: fixed; 
             width: 100%; 
             top: 0; 
-            left: 0;
+            left: 0; 
             right: 0;
             z-index: 1000; 
             box-shadow: 0 3px 12px rgba(0,0,0,0.2); 
@@ -1016,15 +1016,15 @@
     <section id="contact-us">
         <div class="container">
             <h2>Contact Us</h2>
-<form class="contact-form" id="contactForm">
-    <input type="text" id="contactName" name="name" placeholder="Your Name" required />
-    <input type="email" id="contactEmail" name="email" placeholder="Your Email" required />
-    <input type="tel" id="contactPhone" name="phone" placeholder="Your Phone" required />
-    <textarea id="contactMessage" name="message" placeholder="Your Message or Project Details" required></textarea>
-    <button type="submit">Send Message</button>
-    <div class="success-msg" id="contactSuccess">Thank you! Your message has been sent.</div>
-    <div class="error-msg" id="contactError">Failed to send. Please try again.</div>
-</form>
+            <form class="contact-form" id="contactForm">
+                <input type="text" id="contactName" name="name" placeholder="Your Name" required />
+                <input type="email" id="contactEmail" name="email" placeholder="Your Email" required />
+                <input type="tel" id="contactPhone" name="phone" placeholder="Your Phone" required />
+                <textarea id="contactMessage" name="message" placeholder="Your Message or Project Details" required></textarea>
+                <button type="submit">Send Message</button>
+                <div class="success-msg" id="contactSuccess">Thank you! Your message has been sent.</div>
+                <div class="error-msg" id="contactError">Failed to send. Please try again.</div>
+            </form>
         </div>
     </section>
 
@@ -1033,8 +1033,8 @@
             <h2>Client Reviews</h2>
             <div class="review-form">
                 <form id="reviewForm">
-                    <input type="text" id="reviewName" placeholder="Your Name" required />
-                    <select id="reviewRating" required>
+                    <input type="text" id="reviewName" name="name" placeholder="Your Name" required />
+                    <select id="reviewRating" name="rating" required>
                         <option value="" disabled selected>Rate us (1-5)</option>
                         <option value="5">5 — Excellent</option>
                         <option value="4">4 — Very Good</option>
@@ -1042,7 +1042,7 @@
                         <option value="2">2 — Fair</option>
                         <option value="1">1 — Poor</option>
                     </select>
-                    <textarea id="reviewText" rows="3" placeholder="Your feedback..." required></textarea>
+                    <textarea id="reviewText" name="text" rows="3" placeholder="Your feedback..." required></textarea>
                     <button type="submit">Submit Review</button>
                 </form>
             </div>
@@ -1405,24 +1405,20 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                const data = await res.json();
-                if (data.success) {
+                if (res.ok) {
                     loadReviews();
                     reviewForm.reset();
-                } else {
-                    throw new Error(data.error || 'Server error');
                 }
             } catch (err) {
                 alert('Review submission failed.');
             }
         }
 
-        window.deleteReview = async (index) => {
+        window.deleteReview = async (id) => {
             if (confirm('Delete review?')) {
                 try {
-                    const res = await fetch(`/api/reviews/${index}`, { method: 'DELETE' });
-                    const data = await res.json();
-                    if (data.success) loadReviews();
+                    const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+                    if (res.ok) loadReviews();
                 } catch (err) {
                     alert('Delete error');
                 }
@@ -1435,7 +1431,6 @@
             const pageReviews = allReviews.slice(start, end);
             reviewsList.innerHTML = '';
             pageReviews.forEach((r, i) => {
-                const globalIndex = start + i;
                 const div = document.createElement('div');
                 div.className = 'review-item';
                 div.innerHTML = `
@@ -1444,7 +1439,7 @@
                         <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
                     </div>
                     <div class="review-text">${escapeHTML(r.text)}</div>
-                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${globalIndex})">×</button>` : ''}
+                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${r.id})">×</button>` : ''}
                 `;
                 reviewsList.appendChild(div);
             });
