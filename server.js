@@ -4,18 +4,18 @@ const cors = require('cors');
 const { v2: cloudinary } = require('cloudinary');
 const { Pool } = require('pg');
 const path = require('path');
-const fs = require('fs').promises; // Только для папки images
+const fs = require('fs').promises; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// === ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ (из Render Dashboard) ===
+
 const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || '').trim();
 const DATABASE_URL = process.env.DATABASE_URL || '';
 const CLOUDINARY_URL = process.env.CLOUDINARY_URL || '';
 const FORMSPREE_ID = process.env.FORMSPREE_ID || 'xanlrjqb';
 
-// === КРИТИЧНАЯ ПРОВЕРКА ===
+
 if (!ADMIN_PASSWORD) {
     console.error('\nОШИБКА: ADMIN_PASSWORD не задан!');
     console.error('   → Зайди в Render → Environment Variables и добавь:');
@@ -27,13 +27,13 @@ if (!DATABASE_URL) {
     console.warn('Предупреждение: DATABASE_URL не задан — БД не будет работать');
 }
 
-// === ДИАГНОСТИКА ===
+
 console.log('ADMIN_PASSWORD загружен:', !!ADMIN_PASSWORD);
 console.log('DATABASE_URL:', !!DATABASE_URL);
 console.log('CLOUDINARY_URL:', !!CLOUDINARY_URL);
 console.log('FORMSPREE_ID:', FORMSPREE_ID);
 
-// === ПОДКЛЮЧЕНИЕ К БД ===
+
 const pool = new Pool({
     connectionString: DATABASE_URL,
     ssl: DATABASE_URL.includes('amazonaws.com') 
@@ -41,16 +41,16 @@ const pool = new Pool({
         : false
 });
 
-// === CLOUDINARY ===
+
 if (CLOUDINARY_URL) {
     cloudinary.config({ cloudinary_url: CLOUDINARY_URL });
     console.log('Cloudinary: подключён');
 }
 
-// === ПАПКИ ===
+
 const IMAGES_DIR = path.join(__dirname, 'images');
 
-// === ИНИЦИАЛИЗАЦИЯ ===
+
 async function initApp() {
     try {
         await fs.mkdir(IMAGES_DIR, { recursive: true });
@@ -81,13 +81,13 @@ async function initApp() {
     }
 }
 
-// === MIDDLEWARE ===
+
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 app.use('/images', express.static(IMAGES_DIR));
 
-// === MULTER ===
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, IMAGES_DIR),
     filename: (req, file, cb) => {
@@ -106,7 +106,7 @@ const upload = multer({
     }
 });
 
-// === АДМИН ЛОГИН ===
+
 app.post('/api/admin/login', (req, res) => {
     const { password } = req.body || {};
     const inputPass = (password || '').toString().trim();
@@ -115,7 +115,7 @@ app.post('/api/admin/login', (req, res) => {
     res.json({ success });
 });
 
-// === CONTACT FORM ===
+
 app.post('/api/contact', async (req, res) => {
     const { name, email, phone, message } = req.body;
     if (!name || !email || !phone || !message) return res.status(400).json({ success: false });
@@ -133,7 +133,7 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// === GALLERY ===
+
 app.get('/api/images', async (req, res) => {
     try {
         const files = await fs.readdir(IMAGES_DIR);
@@ -174,7 +174,6 @@ app.delete('/api/delete/:filename', async (req, res) => {
     res.json({ success: true });
 });
 
-// === REVIEWS ===
 app.get('/api/reviews', async (req, res) => {
     if (!DATABASE_URL) return res.json([]);
     try {
@@ -214,7 +213,7 @@ app.delete('/api/reviews/:id', async (req, res) => {
     }
 });
 
-// === SITEMAP & ROBOTS ===
+
 app.get('/sitemap.xml', (req, res) => {
     res.header('Content-Type', 'application/xml');
     res.send(`<?xml version="1.0" encoding="UTF-8"?>
@@ -228,7 +227,6 @@ app.get('/robots.txt', (req, res) => {
     res.send('User-agent: *\nAllow: /\nSitemap: https://vb-buildllc.onrender.com/sitemap.xml');
 });
 
-// === ЗАПУСК ===
 (async () => {
     await initApp();
     app.listen(PORT, '0.0.0.0', () => {
