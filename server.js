@@ -17,13 +17,11 @@ if (!ADMIN_PASSWORD || !DATABASE_URL) {
     process.exit(1);
 }
 
-// ВОТ ЭТА СТРОЧКА РЕШАЕТ ВСЁ
 const pool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,   // Отключаем проверку сертификата Aiven
-        // Это безопасно — Aiven всё равно шифрует трафик
-    }
+    ssl: process.env.NODE_ENV === 'production' 
+        ? { rejectUnauthorized: false } 
+        : false
 });
 
 (async () => {
