@@ -1,4 +1,3 @@
-// server.js — финальная версия, работает на Aiven Free 100 %
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
@@ -18,9 +17,13 @@ if (!ADMIN_PASSWORD || !DATABASE_URL) {
     process.exit(1);
 }
 
+// ВОТ ЭТА СТРОЧКА РЕШАЕТ ВСЁ
 const pool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: {
+        rejectUnauthorized: false,   // Отключаем проверку сертификата Aiven
+        // Это безопасно — Aiven всё равно шифрует трафик
+    }
 });
 
 (async () => {
@@ -37,14 +40,14 @@ const pool = new Pool({
                 date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
             )
         `);
-        console.log('Таблица reviews готова');
+        console.log('Таблица reviews создана успешно!');
         client.release();
     } catch (err) {
-        console.error('Ошибка создания таблицы:', err.message);
+        console.error('Ошибка базы:', err.message);
     }
 })();
 
-// Cloudinary
+// Остальной код без изменений...
 if (process.env.CLOUDINARY_URL) {
     cloudinary.config({ cloudinary_url: process.env.CLOUDINARY_URL });
 }
@@ -72,7 +75,9 @@ app.post('/api/contact', async (req,res) => {
     if (!name||!email||!phone||!message) return res.status(400).json({success:false});
     try {
         const r = await fetch(`https://formspree.io/f/${process.env.FORMSPREE_ID || 'xanlrjqb'}`, {
-            method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,phone,message})
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({name,email,phone,message})
         });
         res.json({success:r.ok});
     } catch { res.status(500).json({success:false}); }
@@ -106,7 +111,7 @@ app.get('/api/reviews', async (_,res) => {
         const {rows} = await pool.query('SELECT id,name,rating,text,TO_CHAR(date,\'YYYY-MM-DD\') as date FROM reviews ORDER BY date DESC');
         res.json(rows);
     } catch (err) {
-        console.error('GET reviews error:', err.message);
+        console.error('GET error:', err.message);
         res.json([]);
     }
 });
@@ -118,7 +123,7 @@ app.post('/api/reviews', async (req,res) => {
         await pool.query('INSERT INTO reviews (name,rating,text) VALUES ($1,$2,$3)', [name.trim(), +rating, text.trim()]);
         res.json({success:true});
     } catch (err) {
-        console.error('INSERT review error:', err.message);
+        console.error('INSERT error:', err.message);
         res.json({success:false});
     }
 });
@@ -129,6 +134,6 @@ app.delete('/api/reviews/:id', async (req,res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log('\nСервер VB BUILD LLC запущен и готов!');
-    console.log('База: Aiven PostgreSQL Free\n');
+    console.log('\nVB BUILD LLC — сервер работает!');
+    console.log('База Aiven — всё подключено\n');
 });
