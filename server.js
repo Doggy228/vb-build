@@ -18,13 +18,8 @@ if (!ADMIN_PASSWORD || !DATABASE_URL) {
 }
 
 const pool = new Pool({
-    connectionString: DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,
-        // Эта строка нужна, потому что Aiven использует свой CA
-        // и Render/Node.js 20+ по умолчанию не доверяет даже с rejectUnauthorized: false
-        // но с этой комбинацией — всё работает идеально
-    }
+    connectionString: DATABASE_URL.replace('sslmode=require', 'sslmode=no-verify'),
+    ssl: { rejectUnauthorized: false }
 });
 
 (async () => {
