@@ -4,144 +4,138 @@ const cors = require('cors');
 const { v2: cloudinary } = require('cloudinary');
 const { Pool } = require('pg');
 const path = require('path');
-const fs = require('fs').promises; 
+const fs = require('fs').promises;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
+// ==================== БЕЗОПАСНО: ВСЁ ЧЕРЕЗ ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ =================
 const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || '').trim();
-const DATABASE_URL = process.env.DATABASE_URL || '';
-const CLOUDINARY_URL = process.env.CLOUDINARY_URL || '';
-const FORMSPREE_ID = process.env.FORMSPREE_ID || 'xanlrjqb';
+const DATABASE_URL   = process.env.DATABASE_URL;                    // ← из Render
+const CLOUDINARY_URL    = process.env.CLOUDINARY_URL || '';
+const FORMSPREE_ID   = process.env.FORMSPREE_ID || 'xanlrjqb';
 
-
+// Проверка критически важных переменных
 if (!ADMIN_PASSWORD) {
-    console.error('\nОШИБКА: ADMIN_PASSWORD не задан!');
-    console.error('   → Зайди в Render → Environment Variables и добавь:');
-    console.error('     ADMIN_PASSWORD = kateunder');
+    console.error('ОШИБКА: ADMIN_PASSWORD не задан в переменных окружения!');
+    process.exit(1);
+}
+if (!DATABASE_URL) {
+    console.error('ОШИБКА: DATABASE_URL не задан! Добавь в Render → Environment Variables');
     process.exit(1);
 }
 
-if (!DATABASE_URL) {
-    console.warn('Предупреждение: DATABASE_URL не задан — БД не будет работать');
-}
-
-
-console.log('ADMIN_PASSWORD загружен:', !!ADMIN_PASSWORD);
-console.log('DATABASE_URL:', !!DATABASE_URL);
-console.log('CLOUDINARY_URL:', !!CLOUDINARY_URL);
-console.log('FORMSPREE_ID:', FORMSPREE_ID);
-
-
+// ================= POSTGRESQL (Aiven Free) =================
 const pool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: DATABASE_URL.includes('amazonaws.com') 
-        ? { rejectUnauthorized: false } 
-        : false
+    ssl: {
+        rejectUnauthorized: false   // обязательно для Aiven + Render
+    }
 });
 
-
-if (CLOUDINARY_URL) {
-    cloudinary.config({ cloudinary_url: CLOUDINARY_URL });
-    console.log('Cloudinary: подключён');
-}
-
-
-const IMAGES_DIR = path.join(__dirname, 'images');
-
-
-async function initApp() {
+// Автоматическое создание таблицы + миграция старых отзывов
+(async () => {
     try {
-        await fs.mkdir(IMAGES_DIR, { recursive: true });
-        console.log(`Папка images: ${IMAGES_DIR}`);
+        await pool.query('SELECT 1');
+        console.log('PostgreSQL (Aiven) — подключено успешно');
 
-        if (DATABASE_URL) {
-            const client = await pool.connect();
-            console.log('Подключение к БД: УСПЕШНО');
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS reviews (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+                text TEXT NOT NULL,
+                date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            )
+        `);
+        console.log('Таблица reviews готова');
 
-            await client.query(`
-                CREATE TABLE IF NOT EXISTS reviews (
-                    id SERIAL PRIMARY KEY,
-                    name VARCHAR(100) NOT NULL,
-                    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-                    text TEXT NOT NULL,
-                    date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-                )
-            `);
-            console.log('Таблица reviews готова');
-            client.release();
+        // Переносим старые отзывы (один раз, если база пустая)
+        const { rows } = await pool.query('SELECT COUNT(*) FROM reviews');
+        if (parseInt(rows[0].count) === 0) {
+            console.log('Переносим старые отзывы...');
+            const oldReviews = [
+                { name: "Олександр К.", rating: 5, text: "Дуже задоволений роботою! Кухня стала як нова, все чітко і в термін." },
+                { name: "John D.", rating: 5, text: "Excellent work! Transformed my kitchen completely." },
+                { name: "Maria S.", rating: 5, text: "Professional team, clean work, on time. Highly recommend!" },
+                { name: "Сергій та Олена", rating: 5, text: "Робили ванну під ключ — все супер! Дякуємо!" },
+                { name: "Mike R.", rating: 5, text: "Best renovation company I've worked with. 10/10" }
+            ];
+
+            for (const r of oldReviews) {
+                await pool.query(
+                    'INSERT INTO reviews (name, rating, text) VALUES ($1, $2, $3)',
+                    [r.name, r.rating, r.text]
+                );
+            }
+            console.log(`Перенесено ${oldReviews.length} отзывов`);
         }
     } catch (err) {
-        console.error('Ошибка инициализации:', err.message);
-        if (err.code === 'ECONNRESET' || err.code === 'ENOTFOUND') {
-            console.error('   Локально БД недоступна — НОРМАЛЬНО');
-            console.error('   На Render всё будет работать');
-        }
+        console.error('Ошибка БД при старте:', err.message);
     }
+})();
+
+// ================= CLOUIDNARY =================
+if (CLOUDINARY_URL) {
+    cloudinary.config({ cloudinary_url: CLOUDINARY_URL });
+    console.log('Cloudinary подключён');
 }
 
+// ================= ПАПКИ И СТАТИКА =================
+const IMAGES_DIR = path.join(__dirname, 'images');
+fs.mkdir(IMAGES_DIR, { recursive: true });
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 app.use('/images', express.static(IMAGES_DIR));
 
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, IMAGES_DIR),
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const name = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
-        cb(null, name);
-    }
-});
-
+// ================= MULTER =================
 const upload = multer({
-    storage,
+    storage: multer.diskStorage({
+        destination: (_, __, cb) => cb(null, IMAGES_DIR),
+        filename: (_, file, cb) => {
+            const ext = path.extname(file.originalname);
+            cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
+        }
+    }),
     limits: { fileSize: 10 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(file.originalname)) cb(null, true);
-        else cb(new Error('Только изображения'));
-    }
+    fileFilter: (_, file, cb) => /\.(jpe?g|png|gif|webp)$/i.test(file.originalname) ? cb(null, true) : cb(new Error('Только изображения'))
 });
 
+// ================= РОУТЫ =================
 
+// Админ
 app.post('/api/admin/login', (req, res) => {
-    const { password } = req.body || {};
-    const inputPass = (password || '').toString().trim();
-    const success = inputPass === ADMIN_PASSWORD;
-    console.log(success ? 'АДМИН ВОШЁЛ' : `НЕВЕРНЫЙ ПАРОЛЬ: "${inputPass}"`);
+    const success = req.body?.password?.trim() === ADMIN_PASSWORD;
+    console.log(success ? 'Админ вошёл' : 'Неверный пароль');
     res.json({ success });
 });
 
-
+// Контактная форма → Formspree
 app.post('/api/contact', async (req, res) => {
     const { name, email, phone, message } = req.body;
     if (!name || !email || !phone || !message) return res.status(400).json({ success: false });
 
     try {
-        const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        const r = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, phone, message })
         });
-        res.json({ success: response.ok });
-    } catch (err) {
-        console.error('Formspree error:', err);
+        res.json({ success: r.ok });
+    } catch {
         res.status(500).json({ success: false });
     }
 });
 
-
-app.get('/api/images', async (req, res) => {
+// Галерея
+app.get('/api/images', async (_, res) => {
     try {
         const files = await fs.readdir(IMAGES_DIR);
-        const images = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
-        res.json(images);
-    } catch (err) {
-        console.error('Gallery error:', err);
-        res.status(500).json([]);
+        res.json(files.filter(f => /\.(jpe?g|png|gif|webp)$/i.test(f)));
+    } catch {
+        res.json([]);
     }
 });
 
@@ -162,59 +156,57 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
         console.log('Фото загружено:', url);
         res.json({ success: true, url });
     } catch (err) {
-        console.error('Upload error:', err);
+        console.error('Ошибка загрузки:', err);
         res.status(500).json({ success: false });
     }
 });
 
 app.delete('/api/delete/:filename', async (req, res) => {
-    const filePath = path.join(IMAGES_DIR, req.params.filename);
-    await fs.unlink(filePath).catch(() => {});
-    console.log('Удалено:', req.params.filename);
+    await fs.unlink(path.join(IMAGES_DIR, req.params.filename)).catch(() => {});
     res.json({ success: true });
 });
 
-app.get('/api/reviews', async (req, res) => {
-    if (!DATABASE_URL) return res.json([]);
+// Отзывы
+app.get('/api/reviews', async (_, res) => {
     try {
-        const result = await pool.query('SELECT id, name, rating, text, date FROM reviews ORDER BY date DESC');
-        res.json(result.rows);
+        const { rows } = await pool.query('SELECT id, name, rating, text, TO_CHAR(date, \'YYYY-MM-DD\') as date FROM reviews ORDER BY date DESC');
+        res.json(rows);
     } catch (err) {
-        console.error('DB read error:', err.message);
+        console.error('Ошибка чтения отзывов:', err);
         res.json([]);
     }
 });
 
 app.post('/api/reviews', async (req, res) => {
     const { name, rating, text } = req.body;
-    if (!name || !rating || !text || !DATABASE_URL) {
-        return res.json({ success: true }); // Имитация
-    }
+    if (!name || !rating || !text) return res.json({ success: false });
 
     try {
-        await pool.query('INSERT INTO reviews (name, rating, text) VALUES ($1, $2, $3)', [name.trim(), +rating, text.trim()]);
+        await pool.query(
+            'INSERT INTO reviews (name, rating, text) VALUES ($1, $2, $3)',
+            [name.trim(), +rating, text.trim()]
+        );
         res.json({ success: true });
     } catch (err) {
-        console.error('DB insert error:', err.message);
-        res.json({ success: true });
+        console.error('Ошибка добавления отзыва:', err);
+        res.json({ success: false });
     }
 });
 
 app.delete('/api/reviews/:id', async (req, res) => {
     const id = parseInt(req.params.id, 10);
-    if (isNaN(id) || !DATABASE_URL) return res.json({ success: true });
+    if (isNaN(id)) return res.json({ success: false });
 
     try {
         await pool.query('DELETE FROM reviews WHERE id = $1', [id]);
         res.json({ success: true });
-    } catch (err) {
-        console.error('DB delete error:', err.message);
-        res.json({ success: true });
+    } catch {
+        res.json({ success: false });
     }
 });
 
-
-app.get('/sitemap.xml', (req, res) => {
+// Sitemap & robots
+app.get('/sitemap.xml', (_, res) => {
     res.header('Content-Type', 'application/xml');
     res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -222,16 +214,15 @@ app.get('/sitemap.xml', (req, res) => {
 </urlset>`);
 });
 
-app.get('/robots.txt', (req, res) => {
+app.get('/robots.txt', (_, res) => {
     res.type('text/plain');
     res.send('User-agent: *\nAllow: /\nSitemap: https://vb-buildllc.onrender.com/sitemap.xml');
 });
 
-(async () => {
-    await initApp();
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log('\nСЕРВЕР ЗАПУЩЕН!');
-        console.log(`Адрес: http://localhost:${PORT}`);
-        console.log(`Админ-пароль: ${ADMIN_PASSWORD}\n`);
-    });
-})();
+// ================= ЗАПУСК =================
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('\nVB BUILD LLC — сервер запущен!');
+    console.log(`http://localhost:${PORT}`);
+    console.log(`База данных: Aiven PostgreSQL (Free)`);
+    console.log(`Админ-пароль: ${ADMIN_PASSWORD}\n`);
+});
