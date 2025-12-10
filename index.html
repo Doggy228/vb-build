@@ -109,6 +109,7 @@
             --orange-dark:#e65100;
             --orange-main:#f57c00;
             --orange-light:#ff8c00;
+            --red:#d32f2f;
         }
         header{
             background:var(--orange-dark);
@@ -267,7 +268,7 @@
             font-weight:700
         }
         #about .country{
-            color:var(--orange-main);
+            color:var(--red);
             font-weight:800
         }
         #about .services-grid{
@@ -423,6 +424,7 @@
             background:rgba(255,255,255,0.8);
             cursor:zoom-in
         }
+        }
         .gallery-item img{width:100%;height:100%;object-fit:cover;border-radius:18px;
             transition:transform .7s cubic-bezier(0.2,0.8,0.2,1)}
         .gallery-item:hover{
@@ -485,7 +487,7 @@
             left:0;
             width:100%;
             height:100%;
-            background:rgba(0,0,0,0.95);
+            background:rgba(0,0,0.95);
             backdrop-filter:blur(20px);
             display:flex;
             align-items:center;
@@ -604,14 +606,23 @@
             font-family:inherit;
             font-size:1.05rem;
             background:#fff;
+            box-sizing:border-box
         }
         .review-form select{
-            height:52px;
+            height:54px;
             appearance:none;
-            background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f57c00'%3e%3cpath d='M7 10l5 5 5-5-5z'/%3e%3c/svg%3e");
+            -webkit-appearance:none;
+            background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f57c00'%3e%3cpath d='M7 10l5 5 5-5H7z'/%3e%3c/svg%3e");
             background-repeat:no-repeat;
-            background-position:right 1rem center;
-            background-size:20px
+            background-position:right 16px center;
+            background-size:18px;
+            padding-right:50px;
+            cursor:pointer
+        }
+        .review-form select:focus{
+            outline:none;
+            border-color:var(--orange-main);
+            box-shadow:0 0 0 4px rgba(245,124,0,0.22)
         }
         .review-form button{
             background:var(--orange-main);
@@ -726,7 +737,7 @@
             background:var(--orange-dark);
             color:#fff;
             text-align:center;
-            padding:1.8rem 0;
+            padding:2rem 0;
             font-size:0.85rem;
             position:relative
         }
@@ -759,9 +770,13 @@
             .hero{padding:140px 20px 90px;margin-top:60px !important}
             .work-grid{gap:2.5rem}
             .work h2{font-size:2rem;margin-bottom:3rem}
-            .admin-panel{margin:0.5rem auto 0 0}
-            footer{padding:2rem 0}
-            footer .container{flex-direction:column}
+            .review-form select{
+                height:56px;
+                font-size:1.05rem;
+                padding:0 50px 0 16px;
+                background-position:right 16px center
+            }
+            footer{padding:2.5rem 0}
         }
         @media (min-width:769px){
             .burger,.mobile-call,.mobile-call-top{display:none}
@@ -792,7 +807,6 @@
             <a href="tel:+15029567701" class="mobile-call-top">
                 <span class="material-icons">phone</span>
                 <span>+1 (502) 956-7701</span>
-            </a>
             </a>
             <nav id="desktopNav">
                 <ul>
@@ -1073,7 +1087,7 @@
         lightboxNext.addEventListener('click',showNext);
         lightbox.addEventListener('click',(e)=>e.target===lightbox&&closeLightbox());
         document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')showPrev();if(e.key==='ArrowRight')showNext();});
-        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','before6.jpg','after6.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
+        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg','before6.jpg','after6.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
         function addImageToDOM(src,alt,index,filename){const div=document.createElement('div');div.className='gallery-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(index%8*100));div.innerHTML=`<img src="${src}" alt="${alt}" loading="lazy">${isAdmin?`<button class="gallery-delete" onclick="deleteImage('${filename}')">X</button>`:''}`;div.querySelector('img').addEventListener('click',()=>openLightbox(index));galleryGrid.appendChild(div);}
         window.deleteImage=async(filename)=>{if(confirm('Delete photo?')){try{const res=await fetch(`/api/delete/${filename}`,{method:'DELETE'});const data=await res.json();if(data.success)loadGallery();}catch(err){alert('Delete error');}}};
         uploadBtn.addEventListener('click',async()=>{const file=galleryFile.files[0];if(!file)return alert('Select a photo!');const formData=new FormData();formData.append('image',file);try{const res=await fetch('/api/upload',{method:'POST',body:formData});const data=await res.json();if(data.success){loadGallery();galleryFile.value='';}else{alert('Upload error');}}catch(err){alert('Network error');}});
