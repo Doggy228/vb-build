@@ -1915,21 +1915,34 @@
             }
         };
 
+        function renderStars(rating) {
+            let html = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    html += '<span class="material-icons filled">star</span>';
+                } else {
+                    html += '<span class="material-icons empty">star_outline</span>';
+                }
+            }
+            return html;
+        }
         function renderReviews() {
             const start = (currentPage - 1) * REVIEWS_PER_PAGE;
             const end = start + REVIEWS_PER_PAGE;
             const pageReviews = allReviews.slice(start, end);
             reviewsList.innerHTML = '';
-            pageReviews.forEach((r, i) => {
+            pageReviews.forEach((r) => {
                 const div = document.createElement('div');
                 div.className = 'review-item';
                 div.innerHTML = `
                     <div class="review-header">
                         <div class="review-name">${escapeHTML(r.name)}</div>
-                        <div class="review-stars">${'star'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+                        <div class="review-stars">
+                            ${renderStars(r.rating)}
+                        </div>
                     </div>
                     <div class="review-text">${escapeHTML(r.text)}</div>
-                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${r.id})">×</button>` : ''}
+                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${r.id})">X</button>` : ''}
                 `;
                 reviewsList.appendChild(div);
             });
