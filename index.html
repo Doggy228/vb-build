@@ -73,8 +73,33 @@
             font-family: 'Open Sans', sans-serif;
             line-height: 1.6;
             color: #333;
-            background: #fff;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            background: transparent;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('back.jpg') center center / 700px repeat;
+            background-attachment: fixed;
+            z-index: -9999;
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.78);
+            z-index: -9998;
+            pointer-events: none;
         }
         img {
             max-width: 100%;
@@ -93,6 +118,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 15px;
+            position: relative;
+            z-index: 1;
         }
         :root {
             --orange-dark: #e65100;
@@ -295,65 +322,30 @@
             margin: 0 auto 1.2rem;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
         }
-        .story {
+        .story,.work,.gallery,#contact-us,.reviews,.contact,#about {
             padding: 60px 0;
-            background: var(--gray-bg);
-            text-align: center;
-        }
-        .story h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2rem;
-            color: var(--orange-dark);
-            margin-bottom: 1.2rem;
-        }
-        .story p {
-            font-size: 0.95rem;
-            max-width: 750px;
-            margin: 0 auto 1rem;
-        }
-        #about {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #fff 0%, #fdf6f0 100%);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        #about::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f9f9f9"/><path d="M0 50 Q25 30, 50 50 T100 50" stroke="%23ff8c00" stroke-width="2" fill="none" opacity="0.15"/></svg>') repeat;
-            opacity: 0.1;
-            z-index: 0;
-        }
-        #about > .container {
+            background: transparent;
             position: relative;
             z-index: 1;
         }
-        #about h2 {
+        .story h2,.work h2,.gallery h2,#contact-us h2,.reviews h2,.contact h2,#about h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 2.2rem;
+            text-align: center;
             color: var(--orange-dark);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
+            margin-bottom: 1.5rem;
         }
-        #about h2::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: var(--orange-main);
-            border-radius: 2px;
+        .story h2 { font-size: 2rem; }
+        #about h2 { font-size: 2.2rem; }
+        .work h2 { font-size: 2.5rem; }
+        .gallery h2,.reviews h2 { font-size: 2rem; }
+        .contact h2 { font-size: 1.9rem; }
+        .story p,.contact p {
+            max-width: 750px;
+            margin: 0 auto 1rem;
+            font-size: 0.95rem;
         }
         #about .highlight {
-            background: linear-gradient(120deg, var(--orange-light) 0%, var(--orange-main) 100%);
+            background: linear-gradient(120deg,var(--orange-light) 0%,var(--orange-main) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -361,7 +353,7 @@
         }
         #about .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
             gap: 1.5rem;
             margin: 2.5rem 0;
             max-width: 1000px;
@@ -369,16 +361,17 @@
             margin-right: auto;
         }
         #about .service-item {
-            background: #fff;
+            background: rgba(255,255,255,0.82);
             padding: 1.5rem;
             border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             transition: all 0.4s ease;
             border: 1px solid #eee;
+            backdrop-filter: blur(8px);
         }
         #about .service-item:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(245, 124, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(245,124,0,0.15);
             border-color: var(--orange-main);
         }
         #about .service-item .material-icons {
@@ -404,7 +397,7 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 10px 25px rgba(245, 124, 0, 0.25);
+            box-shadow: 0 10px 25px rgba(245,124,0,0.25);
         }
         #about .guarantee strong {
             font-size: 1.1rem;
@@ -412,16 +405,16 @@
             margin-bottom: 0.5rem;
         }
         .before-after {
-            background: #fff;
+            background: rgba(255,255,255,0.88);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             transition: all 0.35s ease;
             position: relative;
         }
         .before-after:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.22);
         }
         .ba-container {
             position: relative;
@@ -432,8 +425,7 @@
             user-select: none;
             touch-action: pan-y;
         }
-        .ba-before,
-        .ba-after {
+        .ba-before,.ba-after {
             position: absolute;
             top: 0;
             left: 0;
@@ -453,7 +445,7 @@
             height: 100%;
             background: #fff;
             transform: translateX(-50%);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
             cursor: ew-resize;
             z-index: 10;
         }
@@ -467,13 +459,13 @@
             border: 5px solid #fff;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
         }
         .ba-label {
             position: absolute;
             top: 20px;
             padding: 10px 18px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             color: #fff;
             font-size: 1rem;
             font-weight: 700;
@@ -481,20 +473,9 @@
             z-index: 5;
             transition: opacity 0.3s ease;
         }
-        .ba-label.before {
-            left: 20px;
-        }
-        .ba-label.after {
-            right: 20px;
-        }
-        .ba-label.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .work {
-            padding: 100px 0;
-            background: #fff;
-        }
+        .ba-label.before { left: 20px; }
+        .ba-label.after { right: 20px; }
+        .ba-label.hidden { opacity: 0; pointer-events: none; }
         .work h2 {
             font-family: 'Montserrat', sans-serif;
             text-align: center;
@@ -508,11 +489,6 @@
             gap: 3.5rem;
             max-width: 1000px;
             margin: 0 auto;
-        }
-        .gallery {
-            padding: 60px 0;
-            background: var(--gray-bg);
-            text-align: center;
         }
         .gallery h2 {
             font-family: 'Montserrat', sans-serif;
@@ -532,10 +508,10 @@
             position: relative;
             overflow: hidden;
             border-radius: 16px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            transition: transform 0.5s cubic-bezier(0.25,0.8,0.25,1), box-shadow 0.5s ease;
             aspect-ratio: 1 / 1;
-            background: #f0f0f0;
+            background: rgba(255,255,255,0.82);
             cursor: zoom-in;
         }
         .gallery-item img {
@@ -543,11 +519,11 @@
             height: 100%;
             object-fit: cover;
             border-radius: 16px;
-            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.7s cubic-bezier(0.2,0.8,0.2,1);
         }
         .gallery-item:hover {
             transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.22);
             z-index: 5;
         }
         .gallery-item:hover img {
@@ -571,7 +547,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
             z-index: 10;
         }
         .gallery-item:hover .gallery-delete {
@@ -585,10 +561,11 @@
             margin: 1.2rem auto;
             max-width: 100%;
             padding: 1rem;
-            background: #fff;
+            background: rgba(255,255,255,0.88);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: none;
+            backdrop-filter: blur(8px);
         }
         .gallery-upload input[type="file"] {
             width: 100%;
@@ -613,7 +590,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.92);
+            background: rgba(0,0,0,0.92);
             backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
@@ -621,7 +598,7 @@
             z-index: 2000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.5s;
+            transition: opacity 0.5s cubic-bezier(0.25,0.8,0.25,1), visibility 0.5s;
         }
         .lightbox.active {
             opacity: 1;
@@ -631,24 +608,22 @@
             max-width: 92%;
             max-height: 88vh;
             border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             transform: scale(0.9);
             opacity: 0;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
+            transition: transform 0.6s cubic-bezier(0.25,0.8,0.25,1), opacity 0.6s ease;
         }
         .lightbox.active img {
             transform: scale(1);
             opacity: 1;
         }
-        .lightbox-close,
-        .lightbox-prev,
-        .lightbox-next {
+        .lightbox-close,.lightbox-prev,.lightbox-next {
             position: absolute;
             color: #fff;
             font-size: 2.8rem;
             font-weight: 300;
             cursor: pointer;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             width: 56px;
             height: 56px;
             border-radius: 50%;
@@ -661,9 +636,7 @@
         .lightbox-close { top: 20px; right: 25px; }
         .lightbox-prev { left: 25px; top: 50%; transform: translateY(-50%); }
         .lightbox-next { right: 25px; top: 50%; transform: translateY(-50%); }
-        .lightbox-close:hover,
-        .lightbox-prev:hover,
-        .lightbox-next:hover {
+        .lightbox-close:hover,.lightbox-prev:hover,.lightbox-next:hover {
             background: var(--orange-main);
             transform: scale(1.15) translateY(-50%);
         }
@@ -674,7 +647,7 @@
         .lightbox-close::before { content: 'close'; font-family: 'Material Icons'; font-size: 2.8rem; }
         #contact-us {
             padding: 60px 0;
-            background: #fff;
+            background: transparent;
             text-align: center;
         }
         #contact-us h2 {
@@ -686,13 +659,13 @@
         .contact-form {
             max-width: 700px;
             margin: 0 auto;
-            background: var(--gray-bg);
+            background: rgba(255,255,255,0.88);
             padding: 2rem;
             border-radius: 16px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px);
         }
-        .contact-form input,
-        .contact-form textarea {
+        .contact-form input,.contact-form textarea {
             width: 100%;
             padding: 0.9rem;
             margin-bottom: 1rem;
@@ -702,11 +675,10 @@
             font-size: 0.95rem;
             transition: border 0.3s;
         }
-        .contact-form input:focus,
-        .contact-form textarea:focus {
+        .contact-form input:focus,.contact-form textarea:focus {
             outline: none;
             border-color: var(--orange-main);
-            box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.15);
+            box-shadow: 0 0 0 3px rgba(245,124,0,0.15);
         }
         .contact-form textarea {
             min-height: 120px;
@@ -742,7 +714,7 @@
         }
         .contact {
             padding: 60px 0;
-            background: #fff;
+            background: transparent;
             text-align: center;
         }
         .contact h2 {
@@ -765,7 +737,7 @@
         }
         .reviews {
             padding: 60px 0;
-            background: #fff;
+            background: transparent;
             text-align: center;
         }
         .reviews h2 {
@@ -778,13 +750,12 @@
             max-width: 100%;
             margin: 0 auto 2rem;
             padding: 1.5rem;
-            background: var(--gray-bg);
+            background: rgba(255,255,255,0.88);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            backdrop-filter: blur(8px);
         }
-        .review-form input,
-        .review-form textarea,
-        .review-form select {
+        .review-form input,.review-form textarea,.review-form select {
             width: 100%;
             padding: 0.9rem;
             margin-bottom: 0.9rem;
@@ -814,13 +785,14 @@
             margin: 0 auto;
         }
         .review-item {
-            background: #fff;
+            background: rgba(255,255,255,0.88);
             padding: 1rem;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             text-align: left;
             border-left: 4px solid var(--orange-main);
             position: relative;
+            backdrop-filter: blur(8px);
         }
         .review-header {
             display: flex;
@@ -971,7 +943,7 @@
             .burger { display: flex; order: 1; }
             #logo { order: 2; flex: 1; text-align: center; }
             .logo-img { height: 48px; margin: 0 auto; }
-            .mobile-call-top { display: flex; order: 3; align-items: center; background: var(--orange-main); color: #fff; padding: 0.45rem 0.75rem; border-radius: 30px; font-weight: 600; font-size: 0.75rem; gap: 0.35rem; box-shadow: 0 4px 12px rgba(245, 124, 0, 0.35); animation: pulse 2s infinite; }
+            .mobile-call-top { display: flex; order: 3; align-items: center; background: var(--orange-main); color: #fff; padding: 0.45rem 0.75rem; border-radius: 30px; font-weight: 600; font-size: 0.75rem; gap: 0.35rem; box-shadow: 0 4px 12px rgba(245,124,0,0.35); animation: pulse 2s infinite; }
             .mobile-call-top .material-icons { font-size: 1rem; }
             #desktopNav, .call-btn { display: none; }
             .mobile-call { display: flex; }
@@ -1032,7 +1004,6 @@
             </a>
         </div>
     </header>
-
     <div class="nav-overlay" id="navOverlay"></div>
     <nav class="mobile-nav" id="mobileNav">
         <ul>
@@ -1046,25 +1017,21 @@
             <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
     </nav>
-
     <a href="tel:+15029567701" class="mobile-call">
         <span class="material-icons">phone</span>
     </a>
-
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose"></span>
         <span class="lightbox-prev" id="lightboxPrev"></span>
         <span class="lightbox-next" id="lightboxNext"></span>
         <img id="lightboxImage" src="" alt="" style="display:none;">
     </div>
-
     <section id="home" class="hero" data-aos="fade">
         <div class="container">
             <h1 itemprop="name" data-aos="fade-down" data-aos-delay="200">VB Build LLC</h1>
             <p data-aos="fade-up" data-aos-delay="400">Your trusted partner for home renovations across USA.</p>
         </div>
     </section>
-
     <section id="story" class="story" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down">Our Story</h2>
@@ -1072,7 +1039,6 @@
             <p data-aos="fade-up" data-aos-delay="200">Our team is committed to providing exceptional craftsmanship and outstanding customer service. We aim to be your trusted, all-in-one partner for every home renovation need.</p>
         </div>
     </section>
-
     <section id="about" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down">About <span class="highlight">VB Build LLC</span></h2>
@@ -1116,7 +1082,6 @@
             </div>
         </div>
     </section>
-
     <section id="work" class="work">
         <div class="container">
             <h2 data-aos="fade-down">Our Work — Before & After</h2>
@@ -1160,7 +1125,6 @@
             </div>
         </div>
     </section>
-
     <section id="gallery" class="gallery" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down" data-aos-delay="100">Our Gallery</h2>
@@ -1171,7 +1135,6 @@
             <div id="galleryGrid" class="gallery-grid"></div>
         </div>
     </section>
-
     <section id="contact-us" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down" data-aos-delay="100">Contact Us</h2>
@@ -1186,7 +1149,6 @@
             </form>
         </div>
     </section>
-
     <section id="reviews" class="reviews" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down" data-aos-delay="100">Client Reviews</h2>
@@ -1212,7 +1174,6 @@
             </div>
         </div>
     </section>
-
     <section id="contact" class="contact" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down">Contacts</h2>
@@ -1225,7 +1186,6 @@
             <p data-aos="fade-up" data-aos-delay="300">Call or text us anytime — we’re here to help with your renovation project.</p>
         </div>
     </section>
-
     <footer>
         <div class="container">
             <p class="copyright">© 2025 VB Build LLC. All rights reserved.</p>
@@ -1236,443 +1196,75 @@
             </div>
         </div>
     </footer>
-
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true,
-            duration: 900,
-            easing: 'ease-out-cubic',
-            offset: 50
-        });
-
-        window.addEventListener('load', () => {
-            if (window.location.hash === '' || window.location.hash === '#home') {
-                window.scrollTo(0, 0);
-            }
-        });
-
-        const burger = document.getElementById('burger');
-        const mobileNav = document.getElementById('mobileNav');
-        const navOverlay = document.getElementById('navOverlay');
-        const logo = document.getElementById('logo');
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.getElementById('lightboxImage');
-        const lightboxClose = document.getElementById('lightboxClose');
-        const lightboxPrev = document.getElementById('lightboxPrev');
-        const lightboxNext = document.getElementById('lightboxNext');
-        const galleryGrid = document.getElementById('galleryGrid');
-        const galleryUpload = document.getElementById('galleryUpload');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const galleryFile = document.getElementById('galleryFile');
-        const reviewForm = document.getElementById('reviewForm');
-        const reviewsList = document.getElementById('reviewsList');
-        const prevPageBtn = document.getElementById('prevPage');
-        const nextPageBtn = document.getElementById('nextPage');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
-        const adminPassword = document.getElementById('adminPassword');
-        const adminStatus = document.getElementById('adminStatus');
-        const contactForm = document.getElementById('contactForm');
-        const contactSuccess = document.getElementById('contactSuccess');
-        const contactError = document.getElementById('contactError');
-
-        let isAdmin = false;
-        let galleryImages = [];
-        let currentIndex = 0;
-        let allReviews = [];
-        const REVIEWS_PER_PAGE = 4;
-        let currentPage = 1;
-
-        function closeMobileMenu() {
-            burger.classList.remove('active');
-            mobileNav.classList.remove('active');
-            navOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function openMobileMenu() {
-            burger.classList.add('active');
-            mobileNav.classList.add('active');
-            navOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        burger.addEventListener('click', () => {
-            if (mobileNav.classList.contains('active')) {
-                closeMobileMenu();
-            } else {
-                openMobileMenu();
-            }
-        });
-
-        navOverlay.addEventListener('click', closeMobileMenu);
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-            });
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-                closeMobileMenu();
-            }
-        });
-
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('contactName').value.trim();
-            const email = document.getElementById('contactEmail').value.trim();
-            const phone = document.getElementById('contactPhone').value.trim();
-            const message = document.getElementById('contactMessage').value.trim();
-
-            try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone, message })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    contactSuccess.style.display = 'block';
-                    contactError.style.display = 'none';
-                    contactForm.reset();
-                    setTimeout(() => contactSuccess.style.display = 'none', 5000);
-                } else {
-                    throw new Error();
-                }
-            } catch (err) {
-                contactError.style.display = 'block';
-                contactSuccess.style.display = 'none';
-                setTimeout(() => contactError.style.display = 'none', 5000);
-            }
-        });
-
-        adminLoginBtn.addEventListener('click', async () => {
-            const input = adminPassword.value.trim();
-            if (!input) return;
-            try {
-                const res = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: input })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    isAdmin = true;
-                    adminStatus.textContent = 'ON';
-                    adminStatus.style.color = '#fff';
-                    adminPassword.value = '';
-                    galleryUpload.style.display = 'block';
-                    showDeleteButtons();
-                    loadGallery();
-                    loadReviews();
-                } else {
-                    adminStatus.textContent = '×';
-                    adminStatus.style.color = '#ff8a80';
-                    setTimeout(() => adminStatus.textContent = '', 2000);
-                }
-            } catch (err) {
-                adminStatus.textContent = '!';
-                adminStatus.style.color = '#ff8a80';
-            }
-        });
-
-        function showDeleteButtons() {
-            document.querySelectorAll('.gallery-delete, .delete-btn').forEach(btn => {
-                btn.style.display = 'flex';
-                btn.style.opacity = '1';
-            });
-        }
-
-        function smoothScrollTo(targetId) {
-            const targetSection = document.querySelector(targetId);
-            if (targetSection) {
-                const headerHeight = document.querySelector('header').offsetHeight;
-                const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
-        }
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                smoothScrollTo(this.getAttribute('href'));
-            });
-        });
-
-        logo.addEventListener('click', (e) => {
-            e.preventDefault();
-            smoothScrollTo('#home');
-        });
-
-        document.querySelectorAll('.ba-container').forEach(container => {
-            const resizer = container.querySelector('.ba-resizer');
-            const afterImg = container.querySelector('.ba-after');
-            const labelBefore = container.querySelector('.ba-label.before');
-            const labelAfter = container.querySelector('.ba-label.after');
-            let isActive = false;
-
-            const resetLabels = () => {
-                labelBefore.classList.remove('hidden');
-                labelAfter.classList.remove('hidden');
-            };
-
-            const setDefault = () => {
-                afterImg.style.clipPath = 'polygon(50% 0, 100% 0, 100% 100%, 50% 100%)';
-                resizer.style.left = '50%';
-                resetLabels();
-            };
-
-            setDefault();
-
-            const update = (e) => {
-                if (!isActive) return;
-                const rect = container.getBoundingClientRect();
-                const x = (e.clientX || e.touches[0].clientX) - rect.left;
-                const p = Math.max(0, Math.min(100, (x / rect.width) * 100));
-                afterImg.style.clipPath = `polygon(${p}% 0, 100% 0, 100% 100%, ${p}% 100%)`;
-                resizer.style.left = p + '%';
-                if (p < 30) {
-                    labelBefore.classList.add('hidden');
-                    labelAfter.classList.remove('hidden');
-                } else if (p > 70) {
-                    labelAfter.classList.add('hidden');
-                    labelBefore.classList.remove('hidden');
-                } else {
-                    resetLabels();
-                }
-            };
-
-            container.addEventListener('mousedown', (e) => { isActive = true; update(e); });
-            document.addEventListener('mousemove', update);
-            document.addEventListener('mouseup', () => { isActive = false; });
-            container.addEventListener('touchstart', (e) => { isActive = true; update(e); }, { passive: false });
-            container.addEventListener('touchmove', (e) => { e.preventDefault(); update(e); }, { passive: false });
-            container.addEventListener('touchend', () => { isActive = false; });
-        });
-
-        function openLightbox(index) {
-            currentIndex = index;
-            lightboxImage.src = galleryImages[index].src;
-            lightboxImage.alt = galleryImages[index].alt;
-            lightboxImage.style.display = 'block';
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            lightbox.classList.remove('active');
-            setTimeout(() => {
-                lightboxImage.src = '';
-                lightboxImage.alt = '';
-                lightboxImage.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 400);
-        }
-
-        function showPrev() {
-            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-            lightboxImage.src = galleryImages[currentIndex].src;
-            lightboxImage.alt = galleryImages[currentIndex].alt;
-        }
-
-        function showNext() {
-            currentIndex = (currentIndex + 1) % galleryImages.length;
-            lightboxImage.src = galleryImages[currentIndex].src;
-            lightboxImage.alt = galleryImages[currentIndex].alt;
-        }
-
-        lightboxClose.addEventListener('click', closeLightbox);
-        lightboxPrev.addEventListener('click', showPrev);
-        lightboxNext.addEventListener('click', showNext);
-        lightbox.addEventListener('click', (e) => e.target === lightbox && closeLightbox());
-
-        document.addEventListener('keydown', (e) => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') showPrev();
-            if (e.key === 'ArrowRight') showNext();
-        });
-
-        async function loadGallery() {
-            try {
-                const res = await fetch('/api/images');
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const files = await res.json();
-                galleryGrid.innerHTML = '';
-                galleryImages = [];
-                const excluded = ['hero.jpg', 'before1.jpg', 'after1.jpg', 'before2.jpg', 'after2.jpg', 'before3.jpg', 'after3.jpg', 'before4.jpg', 'after4.jpg', 'before5.jpg', 'after5.jpg', 'before6.jpg', 'after6.jpg'];
-                const galleryKeywords = [
-                    "kitchen renovation Louisville",
-                    "bathroom remodel USA",
-                    "professional flooring installation",
-                    "interior painting contractor",
-                    "full home renovation before after",
-                    "modern kitchen design",
-                    "luxury bathroom renovation",
-                    "laminate flooring installation"
-                ];
-                files.filter(f => !excluded.includes(f)).forEach((filename, idx) => {
-                    const src = `images/${filename}`;
-                    const alt = galleryKeywords[idx % galleryKeywords.length] + " by VB Build LLC";
-                    galleryImages.push({ src, alt });
-                    addImageToDOM(src, alt, idx, filename);
-                });
-            } catch (err) {
-                console.error('Gallery load error:', err);
-            }
-        }
-
-        function addImageToDOM(src, alt, index, filename) {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            div.setAttribute('data-aos', 'fade-up');
-            div.setAttribute('data-aos-delay', (index % 8 * 100));
-            div.innerHTML = `
-                <img src="${src}" alt="${alt}" loading="lazy">
-                ${isAdmin ? `<button class="gallery-delete" onclick="deleteImage('${filename}')">×</button>` : ''}
-            `;
-            div.querySelector('img').addEventListener('click', () => openLightbox(index));
-            galleryGrid.appendChild(div);
-        }
-
-        window.deleteImage = async (filename) => {
-            if (confirm('Delete photo?')) {
-                try {
-                    const res = await fetch(`/api/delete/${filename}`, { method: 'DELETE' });
-                    const data = await res.json();
-                    if (data.success) loadGallery();
-                } catch (err) {
-                    alert('Delete error');
-                }
-            }
-        };
-
-        uploadBtn.addEventListener('click', async () => {
-            const file = galleryFile.files[0];
-            if (!file) return alert('Select a photo!');
-            const formData = new FormData();
-            formData.append('image', file);
-            try {
-                const res = await fetch('/api/upload', { method: 'POST', body: formData });
-                const data = await res.json();
-                if (data.success) {
-                    loadGallery();
-                    galleryFile.value = '';
-                } else {
-                    alert('Upload error');
-                }
-            } catch (err) {
-                alert('Network error');
-            }
-        });
-
-        async function loadReviews() {
-            try {
-                const res = await fetch('/api/reviews');
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                allReviews = await res.json();
-                renderReviews();
-            } catch (err) {
-                alert('Failed to load reviews. Check server.');
-            }
-        }
-
-        async function addReview(name, rating, text) {
-            const payload = { name, rating: +rating, text };
-            try {
-                const res = await fetch('/api/reviews', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (res.ok) {
-                    loadReviews();
-                    reviewForm.reset();
-                }
-            } catch (err) {
-                alert('Review submission failed.');
-            }
-        }
-
-        window.deleteReview = async (id) => {
-            if (confirm('Delete review?')) {
-                try {
-                    const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-                    if (res.ok) loadReviews();
-                } catch (err) {
-                    alert('Delete error');
-                }
-            }
-        };
-
-        function renderStars(rating) {
-            let html = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    html += '<span class="material-icons filled">star</span>';
-                } else {
-                    html += '<span class="material-icons empty">star_outline</span>';
-                }
-            }
-            return html;
-        }
-
-        function renderReviews() {
-            const start = (currentPage - 1) * REVIEWS_PER_PAGE;
-            const end = start + REVIEWS_PER_PAGE;
-            const pageReviews = allReviews.slice(start, end);
-            reviewsList.innerHTML = '';
-            pageReviews.forEach((r, i) => {
-                const div = document.createElement('div');
-                div.className = 'review-item';
-                div.setAttribute('data-aos', 'fade-up');
-                div.setAttribute('data-aos-delay', (i * 150));
-                div.innerHTML = `
-                    <div class="review-header">
-                        <div class="review-name">${escapeHTML(r.name)}</div>
-                        <div class="review-stars">
-                            ${renderStars(r.rating)}
-                        </div>
-                    </div>
-                    <div class="review-text">${escapeHTML(r.text)}</div>
-                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview(${r.id})">X</button>` : ''}
-                `;
-                reviewsList.appendChild(div);
-            });
-            updatePagination();
-        }
-
-        function updatePagination() {
-            const total = Math.ceil(allReviews.length / REVIEWS_PER_PAGE);
-            prevPageBtn.disabled = currentPage === 1;
-            nextPageBtn.disabled = currentPage === total || total === 0;
-            document.getElementById('pagination').style.display = total > 1 ? 'flex' : 'none';
-        }
-
-        prevPageBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderReviews(); } };
-        nextPageBtn.onclick = () => {
-            const total = Math.ceil(allReviews.length / REVIEWS_PER_PAGE);
-            if (currentPage < total) { currentPage++; renderReviews(); }
-        };
-
-        reviewForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('reviewName').value.trim();
-            const rating = document.getElementById('reviewRating').value;
-            const text = document.getElementById('reviewText').value.trim();
-            if (name && rating && text) {
-                addReview(name, rating, text);
-            }
-        });
-
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-
+        AOS.init({once:true,duration:900,easing:'ease-out-cubic',offset:50});
+        window.addEventListener('load',()=>{if(window.location.hash===''||window.location.hash==='#home'){window.scrollTo(0,0);}});
+        const burger=document.getElementById('burger');
+        const mobileNav=document.getElementById('mobileNav');
+        const navOverlay=document.getElementById('navOverlay');
+        const logo=document.getElementById('logo');
+        const lightbox=document.getElementById('lightbox');
+        const lightboxImage=document.getElementById('lightboxImage');
+        const lightboxClose=document.getElementById('lightboxClose');
+        const lightboxPrev=document.getElementById('lightboxPrev');
+        const lightboxNext=document.getElementById('lightboxNext');
+        const galleryGrid=document.getElementById('galleryGrid');
+        const galleryUpload=document.getElementById('galleryUpload');
+        const uploadBtn=document.getElementById('uploadBtn');
+        const galleryFile=document.getElementById('galleryFile');
+        const reviewForm=document.getElementById('reviewForm');
+        const reviewsList=document.getElementById('reviewsList');
+        const prevPageBtn=document.getElementById('prevPage');
+        const nextPageBtn=document.getElementById('nextPage');
+        const adminLoginBtn=document.getElementById('adminLoginBtn');
+        const adminPassword=document.getElementById('adminPassword');
+        const adminStatus=document.getElementById('adminStatus');
+        const contactForm=document.getElementById('contactForm');
+        const contactSuccess=document.getElementById('contactSuccess');
+        const contactError=document.getElementById('contactError');
+        let isAdmin=false;
+        let galleryImages=[];
+        let currentIndex=0;
+        let allReviews=[];
+        const REVIEWS_PER_PAGE=4;
+        let currentPage=1;
+        function closeMobileMenu(){burger.classList.remove('active');mobileNav.classList.remove('active');navOverlay.classList.remove('active');document.body.style.overflow='';}
+        function openMobileMenu(){burger.classList.add('active');mobileNav.classList.add('active');navOverlay.classList.add('active');document.body.style.overflow='hidden';}
+        burger.addEventListener('click',()=>{mobileNav.classList.contains('active')?closeMobileMenu():openMobileMenu();});
+        navOverlay.addEventListener('click',closeMobileMenu);
+        document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',()=>{closeMobileMenu();});});
+        document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&mobileNav.classList.contains('active')){closeMobileMenu();}});
+        contactForm.addEventListener('submit',async(e)=>{e.preventDefault();const name=document.getElementById('contactName').value.trim();const email=document.getElementById('contactEmail').value.trim();const phone=document.getElementById('contactPhone').value.trim();const message=document.getElementById('contactMessage').value.trim();try{const res=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,phone,message})});const data=await res.json();if(data.success){contactSuccess.style.display='block';contactError.style.display='none';contactForm.reset();setTimeout(()=>contactSuccess.style.display='none',5000);}else{throw new Error();}}catch(err){contactError.style.display='block';contactSuccess.style.display='none';setTimeout(()=>contactError.style.display='none',5000);}});
+        adminLoginBtn.addEventListener('click',async()=>{const input=adminPassword.value.trim();if(!input)return;try{const res=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:input})});const data=await res.json();if(data.success){isAdmin=true;adminStatus.textContent='ON';adminStatus.style.color='#fff';adminPassword.value='';galleryUpload.style.display='block';showDeleteButtons();loadGallery();loadReviews();}else{adminStatus.textContent='×';adminStatus.style.color='#ff8a80';setTimeout(()=>adminStatus.textContent='',2000);}}catch(err){adminStatus.textContent='!';adminStatus.style.color='#ff8a80';}});
+        function showDeleteButtons(){document.querySelectorAll('.gallery-delete,.delete-btn').forEach(btn=>{btn.style.display='flex';btn.style.opacity='1';});}
+        function smoothScrollTo(targetId){const targetSection=document.querySelector(targetId);if(targetSection){const headerHeight=document.querySelector('header').offsetHeight;const targetPosition=targetSection.getBoundingClientRect().top+window.pageYOffset-headerHeight;window.scrollTo({top:targetPosition,behavior:'smooth'});}}
+        document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();smoothScrollTo(this.getAttribute('href'));});});
+        logo.addEventListener('click',(e)=>{e.preventDefault();smoothScrollTo('#home');});
+        document.querySelectorAll('.ba-container').forEach(container=>{const resizer=container.querySelector('.ba-resizer');const afterImg=container.querySelector('.ba-after');const labelBefore=container.querySelector('.ba-label.before');const labelAfter=container.querySelector('.ba-label.after');let isActive=false;const resetLabels=()=>{labelBefore.classList.remove('hidden');labelAfter.classList.remove('hidden');};const setDefault=()=>{afterImg.style.clipPath='polygon(50% 0,100% 0,100% 100%,50% 100%)';resizer.style.left='50%';resetLabels();};setDefault();const update=(e)=>{if(!isActive)return;const rect=container.getBoundingClientRect();const x=(e.clientX||e.touches[0].clientX)-rect.left;const p=Math.max(0,Math.min(100,(x/rect.width)*100));afterImg.style.clipPath=`polygon(${p}% 0,100% 0,100% 100%,${p}% 100%)`;resizer.style.left=p+'%';if(p<30){labelBefore.classList.add('hidden');labelAfter.classList.remove('hidden');}else if(p>70){labelAfter.classList.add('hidden');labelBefore.classList.remove('hidden');}else{resetLabels();}};container.addEventListener('mousedown',(e)=>{isActive=true;update(e);});document.addEventListener('mousemove',update);document.addEventListener('mouseup',()=>{isActive=false;});container.addEventListener('touchstart',(e)=>{isActive=true;update(e);},{passive:false});container.addEventListener('touchmove',(e)=>{e.preventDefault();update(e);},{passive:false});container.addEventListener('touchend',()=>{isActive=false;});});
+        function openLightbox(index){currentIndex=index;lightboxImage.src=galleryImages[index].src;lightboxImage.alt=galleryImages[index].alt;lightboxImage.style.display='block';lightbox.classList.add('active');document.body.style.overflow='hidden';}
+        function closeLightbox(){lightbox.classList.remove('active');setTimeout(()=>{lightboxImage.src='';lightboxImage.alt='';lightboxImage.style.display='none';document.body.style.overflow='';},400);}
+        function showPrev(){currentIndex=(currentIndex-1+galleryImages.length)%galleryImages.length;lightboxImage.src=galleryImages[currentIndex].src;lightboxImage.alt=galleryImages[currentIndex].alt;}
+        function showNext(){currentIndex=(currentIndex+1)%galleryImages.length;lightboxImage.src=galleryImages[currentIndex].src;lightboxImage.alt=galleryImages[currentIndex].alt;}
+        lightboxClose.addEventListener('click',closeLightbox);
+        lightboxPrev.addEventListener('click',showPrev);
+        lightboxNext.addEventListener('click',showNext);
+        lightbox.addEventListener('click',(e)=>e.target===lightbox&&closeLightbox());
+        document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')showPrev();if(e.key==='ArrowRight')showNext();});
+        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg','before6.jpg','after6.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
+        function addImageToDOM(src,alt,index,filename){const div=document.createElement('div');div.className='gallery-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(index%8*100));div.innerHTML=`<img src="${src}" alt="${alt}" loading="lazy">${isAdmin?`<button class="gallery-delete" onclick="deleteImage('${filename}')">X</button>`:''}`;div.querySelector('img').addEventListener('click',()=>openLightbox(index));galleryGrid.appendChild(div);}
+        window.deleteImage=async(filename)=>{if(confirm('Delete photo?')){try{const res=await fetch(`/api/delete/${filename}`,{method:'DELETE'});const data=await res.json();if(data.success)loadGallery();}catch(err){alert('Delete error');}}};
+        uploadBtn.addEventListener('click',async()=>{const file=galleryFile.files[0];if(!file)return alert('Select a photo!');const formData=new FormData();formData.append('image',file);try{const res=await fetch('/api/upload',{method:'POST',body:formData});const data=await res.json();if(data.success){loadGallery();galleryFile.value='';}else{alert('Upload error');}}catch(err){alert('Network error');}});
+        async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){alert('Failed to load reviews. Check server.');}}
+        async function addReview(name,rating,text){const payload={name,rating:+rating,text};try{const res=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(res.ok){loadReviews();reviewForm.reset();}}catch(err){alert('Review submission failed.');}}
+        window.deleteReview=async(id)=>{if(confirm('Delete review?')){try{const res=await fetch(`/api/reviews/${id}`,{method:'DELETE'});if(res.ok)loadReviews();}catch(err){alert('Delete error');}}};
+        function renderStars(rating){let html='';for(let i=1;i<=5;i++){if(i<=rating){html+='<span class="material-icons filled">star</span>';}else{html+='<span class="material-icons empty">star_outline</span>';}}return html;}
+        function renderReviews(){const start=(currentPage-1)*REVIEWS_PER_PAGE;const end=start+REVIEWS_PER_PAGE;const pageReviews=allReviews.slice(start,end);reviewsList.innerHTML='';pageReviews.forEach((r,i)=>{const div=document.createElement('div');div.className='review-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(i*150));div.innerHTML=`<div class="review-header"><div class="review-name">${escapeHTML(r.name)}</div><div class="review-stars">${renderStars(r.rating)}</div></div><div class="review-text">${escapeHTML(r.text)}</div>${isAdmin?`<button class="delete-btn" onclick="deleteReview(${r.id})">X</button>`:''}`;reviewsList.appendChild(div);});updatePagination();}
+        function updatePagination(){const total=Math.ceil(allReviews.length/REVIEWS_PER_PAGE);prevPageBtn.disabled=currentPage===1;nextPageBtn.disabled=currentPage===total||total===0;document.getElementById('pagination').style.display=total>1?'flex':'none';}
+        prevPageBtn.onclick=()=>{if(currentPage>1){currentPage--;renderReviews();}};
+        nextPageBtn.onclick=()=>{const total=Math.ceil(allReviews.length/REVIEWS_PER_PAGE);if(currentPage<total){currentPage++;renderReviews();}};
+        reviewForm.addEventListener('submit',(e)=>{e.preventDefault();const name=document.getElementById('reviewName').value.trim();const rating=document.getElementById('reviewRating').value;const text=document.getElementById('reviewText').value.trim();if(name&&rating&&text){addReview(name,rating,text);}});
+        function escapeHTML(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML;}
         loadGallery();
         loadReviews();
     </script>
