@@ -582,12 +582,63 @@
             margin-top:1.2rem;
             display:none
         }
-        .contact{padding:80px 0;background:transparent;text-align:center}
-        .contact h2{font-family:'Montserrat',sans-serif;font-size:2.1rem;color:var(--orange-dark);margin-bottom:1.5rem}
-        .contact-phone{font-size:1.75rem;font-weight:700;color:var(--orange-main);margin:1.5rem 0}
-        .contact p{font-size:1.22rem;color:#e65100;font-weight:700;max-width:700px;margin:0 auto}
-        .reviews{padding:80px 0;background:transparent;text-align:center}
-        .reviews h2{font-family:'Montserrat',sans-serif;font-size:2.2rem;color:var(--orange-dark);margin-bottom:1.8rem}
+        .contact{
+            padding:80px 0;
+            background:transparent;
+            text-align:center;
+            position:relative;
+            z-index:1
+        }
+        .contact h2{
+            font-family:'Montserrat',sans-serif;
+            font-size:2.1rem;
+            color:var(--orange-dark);
+            margin-bottom:2.5rem
+        }
+        .contact-phone-block{
+            background:rgba(255,255,255,0.94);
+            padding:2.5rem 2rem;
+            border-radius:22px;
+            max-width:600px;
+            margin:0 auto 2rem;
+            backdrop-filter:blur(12px);
+            box-shadow:0 8px 32px rgba(0,0,0,0.1);
+        }
+        .contact-phone{
+            font-size:1.8rem;
+            font-weight:700;
+            color:var(--orange-main);
+            margin:1.2rem 0;
+            line-height:1.4
+        }
+        .contact-phone a{
+            color:var(--orange-main);
+            transition:color .3s
+        }
+        .contact-phone a:hover{
+            color:var(--orange-dark)
+        }
+        .contact p{
+            font-size:1.22rem;
+            color:#e65100;
+            font-weight:700;
+            max-width:700px;
+            margin:0 auto
+        }
+        .reviews{
+            padding:80px 0;
+            background:transparent;
+            text-align:center;
+            position:relative;
+            z-index:1;
+            will-change:transform /* убираем лаги при скролле */
+        }
+        .reviews h2{
+            font-family:'Montserrat',sans-serif;
+            font-size:2.2rem;
+            color:var(--orange-dark);
+            margin-bottom:1.8rem
+        }
         .review-form{
             max-width:100%;
             margin:0 auto 3rem;
@@ -634,7 +685,13 @@
             transition:all .3s;
             font-size:1.1rem
         }
-        .reviews-list{display:grid;gap:1.5rem;max-width:900px;margin:0 auto}
+        .reviews-list{
+            display:grid;
+            gap:1.5rem;
+            max-width:900px;
+            margin:0 auto;
+            contain:layout style /* важный фикс лагов */
+        }
         .review-item{
             background:rgba(255,255,255,0.92);
             padding:1.5rem;
@@ -642,7 +699,8 @@
             text-align:left;
             border-left:6px solid var(--orange-main);
             position:relative;
-            backdrop-filter:blur(12px)
+            backdrop-filter:blur(12px);
+            contain:layout /* ещё один фикс */
         }
         .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem}
         .review-name{
@@ -776,6 +834,11 @@
                 background-position:right 16px center
             }
             footer{padding:2.5rem 0}
+            .contact-phone-block{
+                padding:2rem 1.5rem;
+                margin-bottom:1.5rem
+            }
+            .contact-phone{font-size:1.65rem}
         }
         @media (min-width:769px){
             .burger,.mobile-call,.mobile-call-top{display:none}
@@ -1015,12 +1078,14 @@
     <section id="contact" class="contact" data-aos="fade-up">
         <div class="container">
             <h2 data-aos="fade-down">Contacts</h2>
-            <p class="contact-phone" data-aos="fade-up" data-aos-delay="100">
-                <a href="tel:+15029567701">Call Us: +1 (502) 956-7701</a>
-            </p>
-            <p class="contact-phone" data-aos="fade-up" data-aos-delay="200">
-                <a href="sms:+15029561179">Text Message: +1 (502) 956-1179</a>
-            </p>
+            <div class="contact-phone-block" data-aos="fade-up" data-aos-delay="100">
+                <p class="contact-phone">
+                    <a href="tel:+15029567701">Call Us: +1 (502) 956-7701</a>
+                </p>
+                <p class="contact-phone">
+                    <a href="sms:+15029561179">Text Message: +1 (502) 956-1179</a>
+                </p>
+            </div>
             <p data-aos="fade-up" data-aos-delay="300">Call or text us anytime — we’re here to help with your renovation project.</p>
         </div>
     </section>
