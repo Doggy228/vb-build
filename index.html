@@ -631,7 +631,7 @@
             text-align:center;
             position:relative;
             z-index:1;
-            will-change:transform /* убираем лаги при скролле */
+            will-change:transform
         }
         .reviews h2{
             font-family:'Montserrat',sans-serif;
@@ -690,7 +690,7 @@
             gap:1.5rem;
             max-width:900px;
             margin:0 auto;
-            contain:layout style /* важный фикс лагов */
+            contain:layout style
         }
         .review-item{
             background:rgba(255,255,255,0.92);
@@ -700,7 +700,7 @@
             border-left:6px solid var(--orange-main);
             position:relative;
             backdrop-filter:blur(12px);
-            contain:layout /* ещё один фикс */
+            contain:layout
         }
         .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem}
         .review-name{
@@ -992,6 +992,7 @@
                         <div class="ba-label after">After</div>
                     </div>
                 </div>
+
                 <div class="before-after" data-aos="fade-up" data-aos-delay="200">
                     <div class="ba-container">
                         <img src="images/before2.jpg" alt="" class="ba-before" aria-hidden="true">
@@ -1001,6 +1002,7 @@
                         <div class="ba-label after">After</div>
                     </div>
                 </div>
+
                 <div class="before-after" data-aos="fade-up" data-aos-delay="300">
                     <div class="ba-container">
                         <img src="images/before3.jpg" alt="" class="ba-before" aria-hidden="true">
@@ -1010,10 +1012,21 @@
                         <div class="ba-label after">After</div>
                     </div>
                 </div>
+
                 <div class="before-after" data-aos="fade-up" data-aos-delay="400">
                     <div class="ba-container">
                         <img src="images/before4.jpg" alt="" class="ba-before" aria-hidden="true">
                         <img src="images/after4.jpg" alt="Living room transformation with new flooring and painting by VB Build LLC" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
+
+                <div class="before-after" data-aos="fade-up" data-aos-delay="500">
+                    <div class="ba-container">
+                        <img src="images/before5.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after5.jpg" alt="Complete master bathroom renovation with modern fixtures and tile work by VB Build LLC" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -1134,19 +1147,27 @@
         let allReviews=[];
         const REVIEWS_PER_PAGE=4;
         let currentPage=1;
+
         function closeMobileMenu(){burger.classList.remove('active');mobileNav.classList.remove('active');navOverlay.classList.remove('active');document.body.style.overflow='';}
         function openMobileMenu(){burger.classList.add('active');mobileNav.classList.add('active');navOverlay.classList.add('active');document.body.style.overflow='hidden';}
         burger.addEventListener('click',()=>{mobileNav.classList.contains('active')?closeMobileMenu():openMobileMenu();});
         navOverlay.addEventListener('click',closeMobileMenu);
         document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',()=>{closeMobileMenu();});});
         document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&mobileNav.classList.contains('active')){closeMobileMenu();}});
+
         contactForm.addEventListener('submit',async(e)=>{e.preventDefault();const name=document.getElementById('contactName').value.trim();const email=document.getElementById('contactEmail').value.trim();const phone=document.getElementById('contactPhone').value.trim();const message=document.getElementById('contactMessage').value.trim();try{const res=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,phone,message})});const data=await res.json();if(data.success){contactSuccess.style.display='block';contactError.style.display='none';contactForm.reset();setTimeout(()=>contactSuccess.style.display='none',5000);}else{throw new Error();}}catch(err){contactError.style.display='block';contactSuccess.style.display='none';setTimeout(()=>contactError.style.display='none',5000);}});
+
         adminLoginBtn.addEventListener('click',async()=>{const input=adminPassword.value.trim();if(!input)return;try{const res=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:input})});const data=await res.json();if(data.success){isAdmin=true;adminStatus.textContent='ON';adminStatus.style.color='#fff';adminPassword.value='';galleryUpload.style.display='block';showDeleteButtons();loadGallery();loadReviews();}else{adminStatus.textContent='×';adminStatus.style.color='#ff8a80';setTimeout(()=>adminStatus.textContent='',2000);}}catch(err){adminStatus.textContent='!';adminStatus.style.color='#ff8a80';}});
+
         function showDeleteButtons(){document.querySelectorAll('.gallery-delete,.delete-btn').forEach(btn=>{btn.style.display='flex';btn.style.opacity='1';});}
+
         function smoothScrollTo(targetId){const targetSection=document.querySelector(targetId);if(targetSection){const headerHeight=document.querySelector('header').offsetHeight;const targetPosition=targetSection.getBoundingClientRect().top+window.pageYOffset-headerHeight;window.scrollTo({top:targetPosition,behavior:'smooth'});}}
+
         document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();smoothScrollTo(this.getAttribute('href'));});});
         logo.addEventListener('click',(e)=>{e.preventDefault();smoothScrollTo('#home');});
+
         document.querySelectorAll('.ba-container').forEach(container=>{const resizer=container.querySelector('.ba-resizer');const afterImg=container.querySelector('.ba-after');const labelBefore=container.querySelector('.ba-label.before');const labelAfter=container.querySelector('.ba-label.after');let isActive=false;const resetLabels=()=>{labelBefore.classList.remove('hidden');labelAfter.classList.remove('hidden');};const setDefault=()=>{afterImg.style.clipPath='polygon(50% 0,100% 0,100% 100%,50% 100%)';resizer.style.left='50%';resetLabels();};setDefault();const update=(e)=>{if(!isActive)return;const rect=container.getBoundingClientRect();const x=(e.clientX||e.touches[0].clientX)-rect.left;const p=Math.max(0,Math.min(100,(x/rect.width)*100));afterImg.style.clipPath=`polygon(${p}% 0,100% 0,100% 100%,${p}% 100%)`;resizer.style.left=p+'%';if(p<30){labelBefore.classList.add('hidden');labelAfter.classList.remove('hidden');}else if(p>70){labelAfter.classList.add('hidden');labelBefore.classList.remove('hidden');}else{resetLabels();}};container.addEventListener('mousedown',(e)=>{isActive=true;update(e);});document.addEventListener('mousemove',update);document.addEventListener('mouseup',()=>{isActive=false;});container.addEventListener('touchstart',(e)=>{isActive=true;update(e);},{passive:false});container.addEventListener('touchmove',(e)=>{e.preventDefault();update(e);},{passive:false});container.addEventListener('touchend',()=>{isActive=false;});});
+
         function openLightbox(index){currentIndex=index;lightboxImage.src=galleryImages[index].src;lightboxImage.alt=galleryImages[index].alt;lightboxImage.style.display='block';lightbox.classList.add('active');document.body.style.overflow='hidden';}
         function closeLightbox(){lightbox.classList.remove('active');setTimeout(()=>{lightboxImage.src='';lightboxImage.alt='';lightboxImage.style.display='none';document.body.style.overflow='';},400);}
         function showPrev(){currentIndex=(currentIndex-1+galleryImages.length)%galleryImages.length;lightboxImage.src=galleryImages[currentIndex].src;lightboxImage.alt=galleryImages[currentIndex].alt;}
@@ -1156,20 +1177,34 @@
         lightboxNext.addEventListener('click',showNext);
         lightbox.addEventListener('click',(e)=>e.target===lightbox&&closeLightbox());
         document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')showPrev();if(e.key==='ArrowRight')showNext();});
-        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg','before6.jpg','after6.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
+
+        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
+
         function addImageToDOM(src,alt,index,filename){const div=document.createElement('div');div.className='gallery-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(index%8*100));div.innerHTML=`<img src="${src}" alt="${alt}" loading="lazy">${isAdmin?`<button class="gallery-delete" onclick="deleteImage('${filename}')">X</button>`:''}`;div.querySelector('img').addEventListener('click',()=>openLightbox(index));galleryGrid.appendChild(div);}
+
         window.deleteImage=async(filename)=>{if(confirm('Delete photo?')){try{const res=await fetch(`/api/delete/${filename}`,{method:'DELETE'});const data=await res.json();if(data.success)loadGallery();}catch(err){alert('Delete error');}}};
+
         uploadBtn.addEventListener('click',async()=>{const file=galleryFile.files[0];if(!file)return alert('Select a photo!');const formData=new FormData();formData.append('image',file);try{const res=await fetch('/api/upload',{method:'POST',body:formData});const data=await res.json();if(data.success){loadGallery();galleryFile.value='';}else{alert('Upload error');}}catch(err){alert('Network error');}});
+
         async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){alert('Failed to load reviews. Check server.');}}
+
         async function addReview(name,rating,text){const payload={name,rating:+rating,text};try{const res=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(res.ok){loadReviews();reviewForm.reset();}}catch(err){alert('Review submission failed.');}}
+
         window.deleteReview=async(id)=>{if(confirm('Delete review?')){try{const res=await fetch(`/api/reviews/${id}`,{method:'DELETE'});if(res.ok)loadReviews();}catch(err){alert('Delete error');}}};
+
         function renderStars(rating){let html='';for(let i=1;i<=5;i++){if(i<=rating){html+='<span class="material-icons filled">star</span>';}else{html+='<span class="material-icons empty">star_outline</span>';}}return html;}
+
         function renderReviews(){const start=(currentPage-1)*REVIEWS_PER_PAGE;const end=start+REVIEWS_PER_PAGE;const pageReviews=allReviews.slice(start,end);reviewsList.innerHTML='';pageReviews.forEach((r,i)=>{const div=document.createElement('div');div.className='review-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(i*150));div.innerHTML=`<div class="review-header"><div class="review-name">${escapeHTML(r.name)}</div><div class="review-stars">${renderStars(r.rating)}</div></div><div class="review-text">${escapeHTML(r.text)}</div>${isAdmin?`<button class="delete-btn" onclick="deleteReview(${r.id})">X</button>`:''}`;reviewsList.appendChild(div);});updatePagination();}
+
         function updatePagination(){const total=Math.ceil(allReviews.length/REVIEWS_PER_PAGE);prevPageBtn.disabled=currentPage===1;nextPageBtn.disabled=currentPage===total||total===0;document.getElementById('pagination').style.display=total>1?'flex':'none';}
+
         prevPageBtn.onclick=()=>{if(currentPage>1){currentPage--;renderReviews();}};
         nextPageBtn.onclick=()=>{const total=Math.ceil(allReviews.length/REVIEWS_PER_PAGE);if(currentPage<total){currentPage++;renderReviews();}};
+
         reviewForm.addEventListener('submit',(e)=>{e.preventDefault();const name=document.getElementById('reviewName').value.trim();const rating=document.getElementById('reviewRating').value;const text=document.getElementById('reviewText').value.trim();if(name&&rating&&text){addReview(name,rating,text);}});
+
         function escapeHTML(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML;}
+
         loadGallery();
         loadReviews();
     </script>
