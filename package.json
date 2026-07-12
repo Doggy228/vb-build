@@ -10,7 +10,8 @@
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^4.21.2",
+    "ejs": "^4.0.1",
+    "express": "^4.22.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^7.0.10",
     "pg": "^8.16.3"

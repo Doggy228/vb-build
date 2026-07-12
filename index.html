@@ -1032,6 +1032,27 @@
                         <div class="ba-label after">After</div>
                     </div>
                 </div>
+
+                <!-- Новые контейнеры -->
+                <div class="before-after" data-aos="fade-up" data-aos-delay="600">
+                    <div class="ba-container">
+                        <img src="images/before6.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after6.jpg" alt="Another stunning kitchen renovation by VB Build LLC" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
+
+                <div class="before-after" data-aos="fade-up" data-aos-delay="700">
+                    <div class="ba-container">
+                        <img src="images/before7.jpg" alt="" class="ba-before" aria-hidden="true">
+                        <img src="images/after7.jpg" alt="Luxury living room transformation by VB Build LLC" class="ba-after">
+                        <div class="ba-resizer"><span class="ba-handle"></span></div>
+                        <div class="ba-label before">Before</div>
+                        <div class="ba-label after">After</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1118,6 +1139,7 @@
     <script>
         AOS.init({once:true,duration:900,easing:'ease-out-cubic',offset:50});
         window.addEventListener('load',()=>{if(window.location.hash===''||window.location.hash==='#home'){window.scrollTo(0,0);}});
+
         const burger=document.getElementById('burger');
         const mobileNav=document.getElementById('mobileNav');
         const navOverlay=document.getElementById('navOverlay');
@@ -1141,12 +1163,14 @@
         const contactForm=document.getElementById('contactForm');
         const contactSuccess=document.getElementById('contactSuccess');
         const contactError=document.getElementById('contactError');
+
         let isAdmin=false;
         let galleryImages=[];
         let currentIndex=0;
         let allReviews=[];
         const REVIEWS_PER_PAGE=4;
         let currentPage=1;
+        let uploadedImages = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
 
         function closeMobileMenu(){burger.classList.remove('active');mobileNav.classList.remove('active');navOverlay.classList.remove('active');document.body.style.overflow='';}
         function openMobileMenu(){burger.classList.add('active');mobileNav.classList.add('active');navOverlay.classList.add('active');document.body.style.overflow='hidden';}
@@ -1178,15 +1202,64 @@
         lightbox.addEventListener('click',(e)=>e.target===lightbox&&closeLightbox());
         document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')showPrev();if(e.key==='ArrowRight')showNext();});
 
-        async function loadGallery(){try{const res=await fetch('/api/images');if(!res.ok)throw new Error(`HTTP ${res.status}`);const files=await res.json();galleryGrid.innerHTML='';galleryImages=[];const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg'];const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation"];files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{const src=`images/${filename}`;const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";galleryImages.push({src,alt});addImageToDOM(src,alt,idx,filename);});}catch(err){console.error('Gallery load error:',err);}}
+        async function loadGallery(){
+            try{
+                galleryGrid.innerHTML='';
+                galleryImages=[];
+                
+                const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg','before6.jpg','after6.jpg','before7.jpg','after7.jpg'];
+                const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation","elegant home remodel"];
 
-        function addImageToDOM(src,alt,index,filename){const div=document.createElement('div');div.className='gallery-item';div.setAttribute('data-aos','fade-up');div.setAttribute('data-aos-delay',(index%8*100));div.innerHTML=`<img src="${src}" alt="${alt}" loading="lazy">${isAdmin?`<button class="gallery-delete" onclick="deleteImage('${filename}')">X</button>`:''}`;div.querySelector('img').addEventListener('click',()=>openLightbox(index));galleryGrid.appendChild(div);}
+                uploadedImages.forEach((item, idx) => {
+                    const src = item.src;
+                    const filename = item.filename || `upload-${idx}`;
+                    const alt = galleryKeywords[idx % galleryKeywords.length] + " by VB Build LLC";
+                    galleryImages.push({src, alt});
+                    addImageToDOM(src, alt, idx, filename);
+                });
+            } catch(err){
+                console.error('Gallery load error:',err);
+            }
+        }
 
-        window.deleteImage=async(filename)=>{if(confirm('Delete photo?')){try{const res=await fetch(`/api/delete/${filename}`,{method:'DELETE'});const data=await res.json();if(data.success)loadGallery();}catch(err){alert('Delete error');}}};
+        function addImageToDOM(src,alt,index,filename){
+            const div=document.createElement('div');
+            div.className='gallery-item';
+            div.setAttribute('data-aos','fade-up');
+            div.setAttribute('data-aos-delay',(index%8*100));
+            div.innerHTML=`<img src="${src}" alt="${alt}" loading="lazy">${isAdmin?`<button class="gallery-delete" onclick="deleteImage('${filename}')">X</button>`:''}`;
+            div.querySelector('img').addEventListener('click',()=>openLightbox(index));
+            galleryGrid.appendChild(div);
+        }
 
-        uploadBtn.addEventListener('click',async()=>{const file=galleryFile.files[0];if(!file)return alert('Select a photo!');const formData=new FormData();formData.append('image',file);try{const res=await fetch('/api/upload',{method:'POST',body:formData});const data=await res.json();if(data.success){loadGallery();galleryFile.value='';}else{alert('Upload error');}}catch(err){alert('Network error');}});
+        window.deleteImage=function(filename){
+            if(confirm('Delete photo?')){
+                uploadedImages = uploadedImages.filter(img => img.filename !== filename);
+                localStorage.setItem('uploadedGallery', JSON.stringify(uploadedImages));
+                loadGallery();
+            }
+        };
 
-        async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){alert('Failed to load reviews. Check server.');}}
+        uploadBtn.addEventListener('click',()=>{
+            const file=galleryFile.files[0];
+            if(!file) return alert('Select a photo!');
+            
+            const reader = new FileReader();
+            reader.onload = function(e){
+                const newImage = {
+                    src: e.target.result,
+                    filename: `upload-${Date.now()}.jpg`
+                };
+                uploadedImages.unshift(newImage);
+                localStorage.setItem('uploadedGallery', JSON.stringify(uploadedImages));
+                loadGallery();
+                galleryFile.value = '';
+                alert('Фото успешно добавлено в галерею!');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){console.error('Failed to load reviews.');}}
 
         async function addReview(name,rating,text){const payload={name,rating:+rating,text};try{const res=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(res.ok){loadReviews();reviewForm.reset();}}catch(err){alert('Review submission failed.');}}
 
@@ -1205,6 +1278,7 @@
 
         function escapeHTML(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML;}
 
+        // Инициализация
         loadGallery();
         loadReviews();
     </script>
