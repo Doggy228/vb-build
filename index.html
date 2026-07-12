@@ -1033,11 +1033,11 @@
                     </div>
                 </div>
 
-                <!-- Новые контейнеры -->
+                <!-- Новые слоты (6 и 7) -->
                 <div class="before-after" data-aos="fade-up" data-aos-delay="600">
                     <div class="ba-container">
                         <img src="images/before6.jpg" alt="" class="ba-before" aria-hidden="true">
-                        <img src="images/after6.jpg" alt="Another stunning kitchen renovation by VB Build LLC" class="ba-after">
+                        <img src="images/after6.jpg" alt="Additional home renovation project by VB Build LLC" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -1047,7 +1047,7 @@
                 <div class="before-after" data-aos="fade-up" data-aos-delay="700">
                     <div class="ba-container">
                         <img src="images/before7.jpg" alt="" class="ba-before" aria-hidden="true">
-                        <img src="images/after7.jpg" alt="Luxury living room transformation by VB Build LLC" class="ba-after">
+                        <img src="images/after7.jpg" alt="Another stunning transformation by VB Build LLC" class="ba-after">
                         <div class="ba-resizer"><span class="ba-handle"></span></div>
                         <div class="ba-label before">Before</div>
                         <div class="ba-label after">After</div>
@@ -1139,7 +1139,6 @@
     <script>
         AOS.init({once:true,duration:900,easing:'ease-out-cubic',offset:50});
         window.addEventListener('load',()=>{if(window.location.hash===''||window.location.hash==='#home'){window.scrollTo(0,0);}});
-
         const burger=document.getElementById('burger');
         const mobileNav=document.getElementById('mobileNav');
         const navOverlay=document.getElementById('navOverlay');
@@ -1163,14 +1162,12 @@
         const contactForm=document.getElementById('contactForm');
         const contactSuccess=document.getElementById('contactSuccess');
         const contactError=document.getElementById('contactError');
-
         let isAdmin=false;
         let galleryImages=[];
         let currentIndex=0;
         let allReviews=[];
         const REVIEWS_PER_PAGE=4;
         let currentPage=1;
-        let uploadedImages = JSON.parse(localStorage.getItem('uploadedGallery') || '[]');
 
         function closeMobileMenu(){burger.classList.remove('active');mobileNav.classList.remove('active');navOverlay.classList.remove('active');document.body.style.overflow='';}
         function openMobileMenu(){burger.classList.add('active');mobileNav.classList.add('active');navOverlay.classList.add('active');document.body.style.overflow='hidden';}
@@ -1190,7 +1187,24 @@
         document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();smoothScrollTo(this.getAttribute('href'));});});
         logo.addEventListener('click',(e)=>{e.preventDefault();smoothScrollTo('#home');});
 
-        document.querySelectorAll('.ba-container').forEach(container=>{const resizer=container.querySelector('.ba-resizer');const afterImg=container.querySelector('.ba-after');const labelBefore=container.querySelector('.ba-label.before');const labelAfter=container.querySelector('.ba-label.after');let isActive=false;const resetLabels=()=>{labelBefore.classList.remove('hidden');labelAfter.classList.remove('hidden');};const setDefault=()=>{afterImg.style.clipPath='polygon(50% 0,100% 0,100% 100%,50% 100%)';resizer.style.left='50%';resetLabels();};setDefault();const update=(e)=>{if(!isActive)return;const rect=container.getBoundingClientRect();const x=(e.clientX||e.touches[0].clientX)-rect.left;const p=Math.max(0,Math.min(100,(x/rect.width)*100));afterImg.style.clipPath=`polygon(${p}% 0,100% 0,100% 100%,${p}% 100%)`;resizer.style.left=p+'%';if(p<30){labelBefore.classList.add('hidden');labelAfter.classList.remove('hidden');}else if(p>70){labelAfter.classList.add('hidden');labelBefore.classList.remove('hidden');}else{resetLabels();}};container.addEventListener('mousedown',(e)=>{isActive=true;update(e);});document.addEventListener('mousemove',update);document.addEventListener('mouseup',()=>{isActive=false;});container.addEventListener('touchstart',(e)=>{isActive=true;update(e);},{passive:false});container.addEventListener('touchmove',(e)=>{e.preventDefault();update(e);},{passive:false});container.addEventListener('touchend',()=>{isActive=false;});});
+        // Исправленный обработчик before/after (работает для всех)
+        document.querySelectorAll('.ba-container').forEach(container=>{
+            const resizer=container.querySelector('.ba-resizer');
+            const afterImg=container.querySelector('.ba-after');
+            const labelBefore=container.querySelector('.ba-label.before');
+            const labelAfter=container.querySelector('.ba-label.after');
+            let isActive=false;
+            const resetLabels=()=>{labelBefore.classList.remove('hidden');labelAfter.classList.remove('hidden');};
+            const setDefault=()=>{afterImg.style.clipPath='polygon(50% 0,100% 0,100% 100%,50% 100%)';resizer.style.left='50%';resetLabels();};
+            setDefault();
+            const update=(e)=>{if(!isActive)return;const rect=container.getBoundingClientRect();const x=(e.clientX||e.touches[0].clientX)-rect.left;const p=Math.max(0,Math.min(100,(x/rect.width)*100));afterImg.style.clipPath=`polygon(${p}% 0,100% 0,100% 100%,${p}% 100%)`;resizer.style.left=p+'%';if(p<30){labelBefore.classList.add('hidden');labelAfter.classList.remove('hidden');}else if(p>70){labelAfter.classList.add('hidden');labelBefore.classList.remove('hidden');}else{resetLabels();}};
+            container.addEventListener('mousedown',(e)=>{isActive=true;update(e);});
+            document.addEventListener('mousemove',update);
+            document.addEventListener('mouseup',()=>{isActive=false;});
+            container.addEventListener('touchstart',(e)=>{isActive=true;update(e);},{passive:false});
+            container.addEventListener('touchmove',(e)=>{e.preventDefault();update(e);},{passive:false});
+            container.addEventListener('touchend',()=>{isActive=false;});
+        });
 
         function openLightbox(index){currentIndex=index;lightboxImage.src=galleryImages[index].src;lightboxImage.alt=galleryImages[index].alt;lightboxImage.style.display='block';lightbox.classList.add('active');document.body.style.overflow='hidden';}
         function closeLightbox(){lightbox.classList.remove('active');setTimeout(()=>{lightboxImage.src='';lightboxImage.alt='';lightboxImage.style.display='none';document.body.style.overflow='';},400);}
@@ -1202,22 +1216,23 @@
         lightbox.addEventListener('click',(e)=>e.target===lightbox&&closeLightbox());
         document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')showPrev();if(e.key==='ArrowRight')showNext();});
 
+        // Исправленная загрузка галереи (исключаем все before/after)
         async function loadGallery(){
             try{
+                const res=await fetch('/api/images');
+                if(!res.ok)throw new Error(`HTTP ${res.status}`);
+                const files=await res.json();
                 galleryGrid.innerHTML='';
                 galleryImages=[];
-                
                 const excluded=['hero.jpg','before1.jpg','after1.jpg','before2.jpg','after2.jpg','before3.jpg','after3.jpg','before4.jpg','after4.jpg','before5.jpg','after5.jpg','before6.jpg','after6.jpg','before7.jpg','after7.jpg'];
-                const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation","elegant home remodel"];
-
-                uploadedImages.forEach((item, idx) => {
-                    const src = item.src;
-                    const filename = item.filename || `upload-${idx}`;
-                    const alt = galleryKeywords[idx % galleryKeywords.length] + " by VB Build LLC";
-                    galleryImages.push({src, alt});
-                    addImageToDOM(src, alt, idx, filename);
+                const galleryKeywords=["kitchen renovation Louisville","bathroom remodel USA","professional flooring installation","interior painting contractor","full home renovation before after","modern kitchen design","luxury bathroom renovation","laminate flooring installation","home remodeling project","interior design Louisville"];
+                files.filter(f=>!excluded.includes(f)).forEach((filename,idx)=>{
+                    const src=`images/${filename}`;
+                    const alt=galleryKeywords[idx%galleryKeywords.length]+" by VB Build LLC";
+                    galleryImages.push({src,alt});
+                    addImageToDOM(src,alt,idx,filename);
                 });
-            } catch(err){
+            }catch(err){
                 console.error('Gallery load error:',err);
             }
         }
@@ -1232,34 +1247,11 @@
             galleryGrid.appendChild(div);
         }
 
-        window.deleteImage=function(filename){
-            if(confirm('Delete photo?')){
-                uploadedImages = uploadedImages.filter(img => img.filename !== filename);
-                localStorage.setItem('uploadedGallery', JSON.stringify(uploadedImages));
-                loadGallery();
-            }
-        };
+        window.deleteImage=async(filename)=>{if(confirm('Delete photo?')){try{const res=await fetch(`/api/delete/${filename}`,{method:'DELETE'});const data=await res.json();if(data.success)loadGallery();}catch(err){alert('Delete error');}}};
 
-        uploadBtn.addEventListener('click',()=>{
-            const file=galleryFile.files[0];
-            if(!file) return alert('Select a photo!');
-            
-            const reader = new FileReader();
-            reader.onload = function(e){
-                const newImage = {
-                    src: e.target.result,
-                    filename: `upload-${Date.now()}.jpg`
-                };
-                uploadedImages.unshift(newImage);
-                localStorage.setItem('uploadedGallery', JSON.stringify(uploadedImages));
-                loadGallery();
-                galleryFile.value = '';
-                alert('Фото успешно добавлено в галерею!');
-            };
-            reader.readAsDataURL(file);
-        });
+        uploadBtn.addEventListener('click',async()=>{const file=galleryFile.files[0];if(!file)return alert('Select a photo!');const formData=new FormData();formData.append('image',file);try{const res=await fetch('/api/upload',{method:'POST',body:formData});const data=await res.json();if(data.success){loadGallery();galleryFile.value='';}else{alert('Upload error');}}catch(err){alert('Network error');}});
 
-        async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){console.error('Failed to load reviews.');}}
+        async function loadReviews(){try{const res=await fetch('/api/reviews');if(!res.ok)throw new Error(`HTTP ${res.status}`);allReviews=await res.json();renderReviews();}catch(err){alert('Failed to load reviews. Check server.');}}
 
         async function addReview(name,rating,text){const payload={name,rating:+rating,text};try{const res=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(res.ok){loadReviews();reviewForm.reset();}}catch(err){alert('Review submission failed.');}}
 
@@ -1278,7 +1270,7 @@
 
         function escapeHTML(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML;}
 
-        // Инициализация
+        // Загрузка всего
         loadGallery();
         loadReviews();
     </script>
